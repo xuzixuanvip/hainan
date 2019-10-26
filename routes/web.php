@@ -127,7 +127,13 @@ Route::prefix('zadmin')->namespace('Admin')->group(function(){
 		Route::resource('permissions', 'PermissionController');	
 		Route::resource('category',   'CategoryController');	
 		Route::resource('system','SystemController');
-		Route::resource('customer','CustomerController');
+		//智能导诊-症状管理
+		Route::resource('symptom','SymptomController');
+		Route::post('symptom/bath-del','SymptomController@bathDel');
+		//智能导诊-疾病管理
+        Route::resource('disease','DiseaseController');
+        Route::post('disease/bath-del','DiseaseController@bathDel');
+
 
 		// 工种管理
 		Route::resource('worktype',   'WorktypeController');	

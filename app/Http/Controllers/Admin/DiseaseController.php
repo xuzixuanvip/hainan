@@ -1,17 +1,11 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
+use App\Models\Kfdisease;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Goods;
-use App\Models\GoodsCate;
-use App\Repos\GoodsRepo;
-use App\Imports\GoodsImport;
-use Maatwebsite\Excel\Facades\Excel;
 
-
-class GoodsController extends Controller
+class DiseaseController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,14 +15,13 @@ class GoodsController extends Controller
     public function index(Request $request)
     {
         $where = [];
-        $query = Goods::query();
-        if($request->keyword) {
+        $flag = Kfdisease::query();
+        if($request->keyword){
             $where['keyword'] = $request->keyword;
-            $query->where('name','like','%'.$request->keyword.'%');
+            $flag->where('name','like','%'.$request->keyword.'%');
         }
-        $list = $query->paginate(10);
-       
-        return view('admin.goods.index',compact('list','where'));
+        $list = $flag->paginate(10);
+        return view('admin.disease.index',compact('list','where'));
     }
 
     /**
@@ -38,9 +31,7 @@ class GoodsController extends Controller
      */
     public function create()
     {
-        $cates = GoodsCate::get();
-        dd($cates);
-        return view('admin.goods.add',compact('cates'));
+        return view('admin.disease.add');
     }
 
     /**
@@ -52,16 +43,15 @@ class GoodsController extends Controller
     public function store(Request $request)
     {
         $rs['status'] = 'danger';
-        $rs['msg']    = '操作失败';
-        $data = $request->except('_token');
-        
-        $flag = GoodsRepo::create($data);
-        if($flag) {
+        $rs['msg'] = '操作失败';
+        $request = $request->except($request->_token);
+        $flag = Kfdisease::create($request);
+        if ($flag){
             $rs['status'] = 'success';
-            $rs['msg']    = '操作成功';
-            return redirect('zadmin/goods')->with('rs',$rs);
+            $rs['msg'] = '操作成功';
+            return redirect('zadmin/disease')->with('rs',$rs);
         }
-        $rs['msg'] = $flag['msg'];
+        $rs['mag'] = $flag['msg'];
         return back()->withInput()->with('rs',$rs);
     }
 
@@ -84,9 +74,9 @@ class GoodsController extends Controller
      */
     public function edit($id)
     {
-        $data = Goods::find($id);  
-        $cates = GoodsCate::get();     
-        return view('admin.goods.edit',compact('data','cates'));
+        $data = Kfdisease::find($id);
+
+        return view('admin.disease.edit',compact('data'));
     }
 
     /**
@@ -99,10 +89,9 @@ class GoodsController extends Controller
     public function update(Request $request, $id)
     {
         $data = $request->except('_token','_method');
-       
-        $rs   = Goods::where('id',$id)->update($data);
-        if($rs) {
-            return redirect('zadmin/goods');
+        $flag = Kfdisease::where('id',$id)->update($data);
+        if ($flag){
+            return redirect('zadmin/disease');
         }
         return back()->withInput();
     }
@@ -115,33 +104,22 @@ class GoodsController extends Controller
      */
     public function destroy($id)
     {
-        $rs = Goods::destroy($id);
-        if ($rs) {
-            return redirect('zadmin/goods');
+        $flag = Kfdisease::destroy($id);
+        if ($flag){
+            return redirect('zadmin/disease');
         }
         return back();
     }
-
-    public function import(Request $request)
-    {
-        Excel::import(new GoodsImport, request()->file('excel'));
-        return back();
-
-    }
-
     public function bathDel(Request $request)
     {
 
         $rs['status'] = false;
         $ids = $request->ids;
-
-        $flag = Goods::where('id',$ids)->delete();
+        $flag = Kfdisease::where('id',$ids)->delete();
         if($flag) {
             $rs['status'] = true;
             return response()->json($rs);
         }
-         return response()->json($rs);
+        return response()->json($rs);
     }
-
-    
 }

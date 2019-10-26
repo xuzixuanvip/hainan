@@ -4,7 +4,7 @@
     <!-- Page-Title -->
     <div class="row">
         <div class="col-sm-12">
-            <h4 class="page-title">添加症状</h4>
+            <h4 class="page-title">症状管理</h4>
             <ol class="breadcrumb">
                 <li><a href="{{url('zadmin/')}}">系统</a></li>
 
@@ -20,7 +20,7 @@
                     <div class="col-sm-4">
                         <form role="form">
                             <div class="form-group contact-search col-sm-8 m-b-30">
-                                <input type="text" id="search" class="form-control"  name="keyword" value="" placeholder="输入病症搜索">
+                                <input type="text" id="search" class="form-control"  name="keyword" value="{{array_get($where,'keyword')}}" placeholder="输入症状名搜索">
 
                             </div>
                             <div class="col-sm-4">
@@ -30,15 +30,13 @@
                     </div>
 
                     <div class="col-sm-7">
-                        <form enctype="multipart/form-data" method="post" action="{{url('zadmin/goods/import')}}">
-
 
                             <div class="col-sm-1" style="float: right">
-                                <a href="{{url('zadmin/customer/create')}}" class="btn btn-primary btn-md waves-effect waves-light m-b-30"
+                                <a href="{{url('zadmin/symptom/create')}}" class="btn btn-primary btn-md waves-effect waves-light m-b-30"
                                 ><i class="md md-add"></i>添加</a>
                             </div>
-                            {{csrf_field()}}
-                        </form>
+
+
                     </div>
                 </div>
 
@@ -56,9 +54,8 @@
                                 <input id="checkAll" type="checkbox" value=""/>全选
 
                             </th>
-                            <th>疾病名称</th>
                             <th>症状名称</th>
-                            <th>前置条件</th>
+                            <th>症状性别</th>
 
 
 
@@ -68,32 +65,34 @@
 
                         <tbody>
 
-
+                        @foreach($list as $v)
                             <tr>
                                 <td>
 
-                                    <input  name="ids[]" type="checkbox" value="" class="check_class">
+                                    <input  name="ids[]" type="checkbox" value="{{$v->id}}" class="check_class">
 
                                 </td>
 
                                 <td>
-                                    疾病名称
+                                    {{$v->name}}
                                 </td>
-                                <td>症状名称</td>
-
-
                                 <td>
-                                    前置条件
+                                    @if($v->sex == 0)
+                                        不限
+                                    @elseif($v->sex == 1)
+                                        男
+                                    @else
+                                        女
+                                    @endif
                                 </td>
-
                                 <td>
-                                    <a href="{{url('zadmin/goods')}}" ><i class="md md-edit"></i>编辑</a>
-                                    <a href="{{url('zadmin/goods')}}" data-method="delete"
+                                    <a href="{{url('zadmin/symptom/'.$v->id.'/edit')}}" ><i class="md md-edit"></i>编辑</a>
+                                    <a href="{{url('zadmin/symptom',$v->id)}}" data-method="delete"
                                        data-token="{{csrf_token()}}" data-confirm="确定删除吗?"><i class="md md-close"></i>删除</a>
                                 </td>
                             </tr>
 
-
+                        @endforeach
 
 
 
@@ -108,7 +107,7 @@
 
                 </div>
 
-
+                {{$list->links()}}
             </div>
 
         </div> <!-- end col -->
@@ -153,7 +152,7 @@
                 </div>
 
 
-
+                {{csrf_field()}}
             </form>
         </div>
     </div>
@@ -173,11 +172,13 @@
             if(ids==''){
                 alert('请选择要删除的数据');return;
             }
-            var url="{{url('zadmin/goods/bath-del')}}";
+            var url="{{url('zadmin/symptom/bath-del')}}";
             var data = {};
             data.ids = ids;
             data._token = "{{csrf_token()}}";
+            console.log(url);
             $.post(url,data,function(rs){
+
                 if(rs.status==true) {
                     window.location.reload();
                 }
