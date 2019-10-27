@@ -135,6 +135,18 @@ Route::prefix('zadmin')->namespace('Admin')->group(function(){
         Route::post('disease/bath-del','DiseaseController@bathDel');
         Route::resource('body','BodyController',['only'=>['index']]);// 身体部位管理
 
+
+
+
+
+
+
+
+
+
+
+
+//        ---------------------------
 		// 工种管理
 		Route::resource('worktype',   'WorktypeController');	
 
