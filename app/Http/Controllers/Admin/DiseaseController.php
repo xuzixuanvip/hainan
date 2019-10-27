@@ -122,4 +122,8 @@ class DiseaseController extends Controller
         }
         return response()->json($rs);
     }
+    public function dorela($id)
+    {
+        dd($id);
+    }
 }

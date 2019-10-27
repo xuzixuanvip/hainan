@@ -84,7 +84,7 @@
                                         @endif
                                 </td>
                                 <td>
-                                    <a href="">对应症状添加</a>
+                                    <a href="{{url('zadmin/disease/symptom/'.$v->id)}}">对应症状添加</a>
                                 </td>
                                 <td>
                                     <a href="{{url('zadmin/disease/'.$v->id.'/edit')}}" ><i class="md md-edit"></i>编辑</a>
