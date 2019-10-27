@@ -46,17 +46,17 @@
             <div class="card-box">
                 <div class="row">
                     <div class="col-sm-4">
-                        <form role="form">
-                            <div class="form-group contact-search col-sm-8 m-b-30">
-                                    <input type="text" id="search" class="form-control"  name="keyword" value="" placeholder="输入疾病名搜索">
+{{--                        <form role="form">--}}
+{{--                            <div class="form-group contact-search col-sm-8 m-b-30">--}}
+{{--                                    <input type="text" id="search" class="form-control"  name="keyword" value="" placeholder="输入疾病名搜索">--}}
 
-                            </div>
-                            <div class="col-sm-4">
-                                <button type="submit" class="btn btn-white"><i class="fa fa-search"></i></button>
-                            </div> <!-- form-group -->
-                        </form>
+{{--                            </div>--}}
+{{--                            <div class="col-sm-4">--}}
+{{--                                <button type="submit" class="btn btn-white"><i class="fa fa-search"></i></button>--}}
+{{--                            </div> <!-- form-group -->--}}
+{{--                        </form>--}}
                     </div>
-
+    
                     <div class="col-sm-7">
 
                         <div class="col-sm-1" style="float: right">
@@ -110,8 +110,8 @@
                                 </td>
                                 <td>
                                     <a href="{{ route('body.edit',$v->id) }}" ><i class="md md-edit"></i>编辑</a>
-                                    <a href="" data-method="delete"
-                                       data-token="" data-confirm="确定删除吗?"><i class="md md-close"></i>删除</a>
+                                            <a type="submit" href="javascript:;" onclick="return delete_body('{{ $v->id }}')" data-method="delete"
+                                               data-token="" ><i class="md md-close"></i>删除</a>
                                 </td>
                             </tr>
                             @foreach($v->son as $vv)
@@ -126,8 +126,8 @@
                                     </td>
                                     <td>
                                         <a href="{{ route('body.edit',$vv->id) }}" ><i class="md md-edit"></i>编辑</a>
-                                        <a href="" data-method="delete"
-                                           data-token="" data-confirm="确定删除吗?"><i class="md md-close"></i>删除</a>
+                                        <a type="submit" href="javascript:;" onclick="return delete_body('{{ $vv->id }}')"  data-method="delete"
+                                                   data-token=""><i class="md md-close"></i>删除</a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -209,18 +209,20 @@
             if(ids==''){
                 alert('请选择要删除的数据');return;
             }
-            var url="{{url('zadmin/disease/bath-del')}}";
-            var data = {};
-            data.ids = ids;
-            data._token = "{{csrf_token()}}";
-            console.log(url);
-            $.post(url,data,function(rs){
-
-                if(rs.status==true) {
+            var url="{{ route('body.deleteAll') }}";
+            var data = {
+                'ids':ids,
+                '_method':'DELETE',
+                '_token' :'{{ csrf_token() }}'
+            };
+            // data.ids = ids;
+            {{--data._token = "{{csrf_token()}}";--}}
+            $.post(url,data,function(data){
+                // if(data,code == 200) {
                     window.location.reload();
-                }
-            });
-            console.info(ids);
+                // }
+            },'json');
+            // console.info(ids);
         });
 
         function display(id) {
@@ -229,6 +231,20 @@
             } else {
                 $('.son_'+id).attr('hidden',true);
             }
+        }
+
+        function delete_body(id) {
+            if(!confirm('您确定要删除'+id)){
+                return false;
+            }
+
+            $.post('{{ route('body.delete') }}',{'id':id,'_token':'{{ csrf_token() }}','_method':'DELETE'},function (data) {
+                if(data.code == 200){
+                    window.location.href = '{{ route('body.index') }}';
+                }
+            },'json');
+
+            return false;
         }
     </script>
 @endsection

@@ -44,4 +44,17 @@ class BodyController extends Controller
     }
 
 
+    public function delete(Request $request,Body $body)
+    {
+        $body->find($request->id)->delete();
+        return $this->json_msg($body);
+    }
+
+
+    public function deleteAll(Request $request,Body $body)
+    {
+        return $body->delete_All($request->ids);
+    }
+
+
 }

@@ -41,5 +41,15 @@ class Body extends Model
         return $prent;
     }
 
+    public function delete_All($ids)
+    {
+        $prent = $this->whereIn('id',$ids)->delete();
+        $son = $this->whereIn('pid',$ids)->delete();
+        if($prent){
+            return response()->json(['code'=>200])->setEncodingOptions(JSON_UNESCAPED_UNICODE);
+        } else {
+            return response()->json(['code'=>400])->setEncodingOptions(JSON_UNESCAPED_UNICODE);
+        }
+    }
 
 }

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin\Traits;
 
 
+use http\Env\Response;
+
 trait MessageTraits
 {
 
@@ -15,6 +17,16 @@ trait MessageTraits
         }
     }
 
+
+    public function json_msg($model,$msg='')
+    {
+        if($model) {
+            return response()->json(['code'=>200,'msg'=>$msg.'成功~'])->setEncodingOptions(JSON_UNESCAPED_UNICODE);
+        } else {
+            return response()->json(['code'=>400,'msg'=>$msg.'失败~'])->setEncodingOptions(JSON_UNESCAPED_UNICODE);
+        }
+
+    }
 
 
 }
