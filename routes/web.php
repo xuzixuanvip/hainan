@@ -40,23 +40,23 @@ Route::middleware(['wechat.oauth'])->group(function(){
 Route::middleware(['web','wechat.oauth:snsapi_userinfo'])->prefix('user')->namespace('User')->group(function(){
 //Route::middleware(['web','checkUser','wechat.oauth'])->prefix('user')->namespace('User')->group(function(){
 
-	
-	// 留言板	
+
+	// 留言板
 	Route::get('message',	     'MessageController@index');
 	Route::get('message/new',	 'MessageController@new');
 	Route::post('message/save',	 'MessageController@save');
 
 	// 意见箱
 	Route::get('yijian',	 	'MessageController@yijian');
-    Route::post('yijian-save',	'MessageController@yijianSave');	
+    Route::post('yijian-save',	'MessageController@yijianSave');
 
     // 求救
-   
+
     Route::get('emergency/send-msg' ,'EmergencyController@senMessage');
     Route::get('emergency/index' ,   'EmergencyController@index');
     Route::get('emergency/test' ,    'EmergencyController@test');
 	Route::prefix('task')->group(function(){
-		
+
 		Route::get('create', 	 'TaskController@create');
 		Route::post('save',  	 'TaskController@save');
 		Route::any('complete',	 'TaskController@complete');
@@ -66,25 +66,25 @@ Route::middleware(['web','wechat.oauth:snsapi_userinfo'])->prefix('user')->names
 		Route::post('update',     'TaskController@update');
 		Route::any('reply',       'TaskController@reply');
 		Route::any('process',       'TaskController@process');
-		Route::any('process-price', 'TaskController@processPrice');	
-		Route::get('price-detail/{id}',  'TaskController@priceDetail');		
+		Route::any('process-price', 'TaskController@processPrice');
+		Route::get('price-detail/{id}',  'TaskController@priceDetail');
 		Route::any('price-confirmed','TaskController@priceConfirmed');
-		
-		// 报修任务完成		
+
+		// 报修任务完成
 		Route::any('process-complete','TaskController@processComplete');
 
 		Route::any('comment',       'TaskController@comment');
 		Route::any('refund',      'TaskController@refund');
-		Route::any('/',		      'TaskController@index');	
+		Route::any('/',		      'TaskController@index');
 	});
-	
+
 	Route::get('/',        'IndexController@index');
 });
 
 Route::prefix('zadmin')->namespace('Admin')->group(function(){
 	Route::middleware('checkAdmin')->group(function(){
 		Route::namespace('Diancan')->prefix('diancan')->group(function(){
-			
+
 		});
 		Route::get('test','IndexController@test');
 		Route::get('system-info','SystemController@info');
@@ -103,7 +103,7 @@ Route::prefix('zadmin')->namespace('Admin')->group(function(){
 
 			// 导出
 			Route::get('export','TaskController@taskExport');
-			
+
 			// 回复任务
 			Route::any('reply', 'TaskController@reply');
 
@@ -111,7 +111,7 @@ Route::prefix('zadmin')->namespace('Admin')->group(function(){
 			Route::get('/','TaskController@index');
 		});
 
-		
+
 		Route::resource('admins',     'AdminController');
 		Route::resource('users',      'UserController');
 		Route::resource('roles',      'RoleController');
@@ -124,8 +124,8 @@ Route::prefix('zadmin')->namespace('Admin')->group(function(){
 		Route::get('yijian',	  'MessageController@yijian');
 		Route::resource('emergency',   'EmergencyController');
 		Route::get('menus/permission/{menu_id}', 'MenuController@menuPermission');
-		Route::resource('permissions', 'PermissionController');	
-		Route::resource('category',   'CategoryController');	
+		Route::resource('permissions', 'PermissionController');
+		Route::resource('category',   'CategoryController');
 		Route::resource('system','SystemController');
 		//智能导诊-症状管理
 		Route::resource('symptom','SymptomController');
@@ -133,7 +133,11 @@ Route::prefix('zadmin')->namespace('Admin')->group(function(){
 		//智能导诊-疾病管理
         Route::resource('disease','DiseaseController');
         Route::post('disease/bath-del','DiseaseController@bathDel');
+
         Route::resource('body','BodyController',['only'=>['index','create','store','edit','update']]);// 身体部位管理
+
+        Route::get('disease/symptom/{id}','DiseaseController@dorela');
+
 
 
 
@@ -148,9 +152,9 @@ Route::prefix('zadmin')->namespace('Admin')->group(function(){
 
 //        ---------------------------
 		// 工种管理
-		Route::resource('worktype',   'WorktypeController');	
+		Route::resource('worktype',   'WorktypeController');
 
-		
+
 		// 采购信息
 		Route::resource('purchases',  'PurchaseController');
 
@@ -160,7 +164,7 @@ Route::prefix('zadmin')->namespace('Admin')->group(function(){
 		Route::get('fee/change',  'FeeController@change');
 		Route::get('fee/del',  'FeeController@del');
 		Route::get('fee/month','FeeController@month');
-		Route::resource('fee',  	'FeeController');		
+		Route::resource('fee',  	'FeeController');
 		Route::resource('feetype',  'FeetypeController');
 		Route::resource('yezhu',    'YezhuController');
 
@@ -168,7 +172,7 @@ Route::prefix('zadmin')->namespace('Admin')->group(function(){
 		Route::post('outstock/save-goods','OutstockController@saveGoods');
 		Route::post('outstock/update-goods','OutstockController@updateGoods');
 		Route::get('outstock/print/{id}',  'OutstockController@print');
-		
+
 		Route::resource('goods',     'GoodsController');
 		Route::post('goods/bath-del','GoodsController@bathDel');
 		Route::post('goods/import',  'GoodsController@import');
@@ -180,9 +184,9 @@ Route::prefix('zadmin')->namespace('Admin')->group(function(){
 			Route::get('wxuser/import',  'WxuserController@import');
 			Route::post('wxuser/save-user','WxuserController@saveToUser');
 			Route::resource('wxuser',  'WxuserController');
-			
-			
-			
+
+
+
 			Route::get('msgtpl',     'MsgtplController@index');
 			Route::get('msgtpl-show/{tpl_key}','MsgtplController@show');
 			Route::get('msgtpl-edit/{tpl_key}','MsgtplController@edit');
@@ -202,8 +206,8 @@ Route::prefix('zadmin')->namespace('Admin')->group(function(){
 		});
 
 
-		
-		
+
+
 
 		// 统计报表
 		Route::prefix('census')->group(function(){
@@ -216,8 +220,8 @@ Route::prefix('zadmin')->namespace('Admin')->group(function(){
 		Route::resource('worklog','WorklogController');
 		Route::resource('worker','WorkerController');
 
-		
-		//退单 
+
+		//退单
 		Route::post('refund','IndexController@refund');
 
 		//派工
@@ -241,16 +245,16 @@ Route::prefix('zadmin')->namespace('Admin')->group(function(){
 
 		//后台首页
 		Route::get('/',		   'IndexController@index');
-		
+
 	});
-	
+
 		Route::get('login',    'LoginController@login');
 		Route::post('logindo', 'LoginController@loginDo');
 		Route::get('logout',   'LoginController@logOut');
 
 
-		
-	
+
+
 });
 
 // 公开的
