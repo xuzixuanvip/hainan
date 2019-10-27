@@ -133,7 +133,7 @@ Route::prefix('zadmin')->namespace('Admin')->group(function(){
 		//智能导诊-疾病管理
         Route::resource('disease','DiseaseController');
         Route::post('disease/bath-del','DiseaseController@bathDel');
-        Route::resource('body','BodyController',['only'=>['index']]);// 身体部位管理
+        Route::resource('body','BodyController',['only'=>['index','create','store','edit','update']]);// 身体部位管理
 
 
 
