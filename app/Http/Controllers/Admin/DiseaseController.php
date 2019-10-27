@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 use App\Models\Kfdisease;
+use App\Models\Kfsymptom;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 
 class DiseaseController extends Controller
 {
@@ -124,6 +126,40 @@ class DiseaseController extends Controller
     }
     public function dorela($id)
     {
-        dd($id);
+        $data = Kfdisease::find($id);
+
+        $result = Kfsymptom::all();
+
+        $rs = $data->symptom_disease()->get();
+        $rsrs = [];
+        foreach ($rs as $k=>$v){
+            dump($v->id);
+            $rsrs[] = $v->id;
+        }
+        return view('admin.disease.symptom',compact('data','result','rsrs'));
+    }
+
+    public function insertdata(Request $request,$id)
+    {
+        $disease_id = $id;
+        $symptom_id  = $request->symptom_id;
+        $arr = [];
+        $member = [];
+        foreach($symptom_id as $k=>$v){
+            $arr['diseases_id'] = $disease_id;
+            $arr['symptom_id'] = $v;
+            $member[] = $arr;
+        }
+        $delete = DB::table('symptom_diseases')->where('diseases_id',$id)->delete();
+        $data = DB::table('symptom_diseases')->insert($member);
+        $rs['status'] = 'danger';
+        $rs['msg'] = '操作失败';
+        if ($data){
+            $rs['status'] = 'success';
+            $rs['msg'] = '操作成功';
+            return redirect('zadmin/disease')->with('rs',$rs);
+        }
+        $rs['mag'] = $flag['msg'];
+        return back()->withInput()->with('rs',$rs);
     }
 }
