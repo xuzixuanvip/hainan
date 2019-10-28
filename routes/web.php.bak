@@ -137,7 +137,7 @@ Route::prefix('zadmin')->namespace('Admin')->group(function(){
         Route::resource('body','BodyController',['only'=>['index','create','store','edit','update']]);// 身体部位管理
 
         Route::get('disease/symptom/{id}','DiseaseController@dorela');
-
+        Route::post('disease/symptom/insertdata/{id}','DiseaseController@insertdata');
 
 
 
