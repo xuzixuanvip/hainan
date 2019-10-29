@@ -172,7 +172,7 @@
                                     ><a href="{{url('zadmin/symptom')}}">症状管理</a></li>
                                     <li><a href="{{url('zadmin/disease')}}">疾病管理</a></li>
                                     <li><a href="{{url('zadmin/body')}}">身体管理</a></li>
-                                    <li><a href="1">条件管理</a></li>
+                                    <li><a href="{{url('zadmin/tags')}}">条件管理</a></li>
                                     <li><a href="2">科室管理</a></li>
 
 

@@ -133,7 +133,6 @@ class DiseaseController extends Controller
         $rs = $data->symptom_disease()->get();
         $rsrs = [];
         foreach ($rs as $k=>$v){
-            dump($v->id);
             $rsrs[] = $v->id;
         }
         return view('admin.disease.symptom',compact('data','result','rsrs'));

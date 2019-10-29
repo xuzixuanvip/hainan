@@ -21,4 +21,8 @@ class Kfsymptom extends Model
     {
         return $this->belongsToMany('App\Models\body','body_symptom','symptom_id','body_id');
     }
+    public function tags()
+    {
+        return $this->belongsToMany('App\Models\Kftags','tags_diseases','tags_id','symptom_id');
+    }
 }
