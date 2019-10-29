@@ -137,6 +137,8 @@ Route::prefix('zadmin')->namespace('Admin')->group(function(){
         Route::resource('body','BodyController',['only'=>['index','create','store','edit','update']]);// 身体部位管理
         Route::delete('body/delete','BodyController@delete')->name('body.delete');
         Route::delete('body/deleteAll','BodyController@deleteAll')->name('body.deleteAll');
+        Route::get('body/add_symptom/{body}','BodyController@add_symptom')->name('body.add_symptom');
+        Route::post('body/add_symptom/store','BodyController@symptom_store')->name('body.add_symptom.store');
 // ========================================
         Route::get('disease/symptom/{id}','DiseaseController@dorela');
         Route::post('disease/symptom/insertdata/{id}','DiseaseController@insertdata');

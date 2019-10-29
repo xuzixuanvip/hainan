@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Body;
 use App\Http\Controllers\Admin\Traits\MessageTraits;
 use App\Http\Requests\BodyRequest;
+use App\Models\Kfsymptom;
+use  App\Models\BodySymptom;
 
 class BodyController extends Controller
 {
@@ -56,5 +58,18 @@ class BodyController extends Controller
         return $body->delete_All($request->ids);
     }
 
+    public function add_symptom(Body $body)
+    {
+        $result = Kfsymptom::get();
+        $symptom = $body->symptom;
+        return view('admin.body.symptom',compact('body','result','symptom'));
+    }
+
+    public function symptom_store(Request $request,BodySymptom $bodysymptom,Body $body)
+    {
+        $bodysymptom->where('body_id',$request->id)->delete();
+        $body->find($request->id)->symptom()->attach($request->symptom_id);
+        return $this->redirect_msg($body,route('body.index'),'添加');
+    }
 
 }

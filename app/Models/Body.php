@@ -18,20 +18,10 @@ class Body extends Model
     protected $fillable = ['name', 'sex','pid'];
 
 
-    public function scopePrentBody($query)
-    {
-        return $query->select('name','id')->where('pid',0)->get()->pluck('name','id');
-    }
-
-    public function scopeFilter($query,Filters $filters)
-    {
-        return $filters->apply($query);
-    }
-
     public function table($pid = 0)
     {
         if($pid == 0){
-            $prent = $this->where('pid',$pid)->paginate(10);
+            $prent = $this->where('pid',$pid)->paginate(5);
         } else {
             $prent = $this->where('pid',$pid)->get();
         }
@@ -51,5 +41,9 @@ class Body extends Model
             return response()->json(['code'=>400])->setEncodingOptions(JSON_UNESCAPED_UNICODE);
         }
     }
+
+
+
+
 
 }

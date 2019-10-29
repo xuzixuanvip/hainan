@@ -56,7 +56,7 @@
 {{--                            </div> <!-- form-group -->--}}
 {{--                        </form>--}}
                     </div>
-    
+
                     <div class="col-sm-7">
 
                         <div class="col-sm-1" style="float: right">
@@ -106,7 +106,7 @@
                                     {{ $v->sex }}
                                 </td>
                                 <td>
-                                    <a href="">对应症状添加</a>
+                                    <a href="{{ route('body.add_symptom',$v->id) }}">对应症状添加({{ $v->symptom->count() }})</a>
                                 </td>
                                 <td>
                                     <a href="{{ route('body.edit',$v->id) }}" ><i class="md md-edit"></i>编辑</a>
@@ -122,7 +122,7 @@
                                     <td>&nbsp;&nbsp;&nbsp;|-----{{$vv->name}}</td>
                                     <td>{{ $vv->sex }}</td>
                                     <td>
-                                        <a href="">对应症状添加</a>
+                                        <a href="{{ route('body.add_symptom',$vv->id) }}">对应症状添加 ({{ $vv->symptom->count() }})</a>
                                     </td>
                                     <td>
                                         <a href="{{ route('body.edit',$vv->id) }}" ><i class="md md-edit"></i>编辑</a>

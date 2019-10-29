@@ -13,5 +13,20 @@ trait BodyAttribute
 
     }
 
+    public function scopePrentBody($query)
+    {
+        return $query->select('name','id')->where('pid',0)->get()->pluck('name','id');
+    }
+
+    public function scopeFilter($query,Filters $filters)
+    {
+        return $filters->apply($query);
+    }
+
+
+    public function symptom()
+    {
+        return $this->belongsToMany('App\Models\Kfsymptom','body_symptom','body_id','symptom_id');
+    }
 
 }

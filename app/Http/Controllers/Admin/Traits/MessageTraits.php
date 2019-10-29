@@ -11,7 +11,7 @@ trait MessageTraits
     public function redirect_msg($model,$url='',$msg = '')
     {
         if($model) {
-            return redirect()->to($url)->with('message', $msg . '修改成功！');
+            return redirect()->to($url)->with('message', $msg . '成功！');
         } else {
             return back()->withErrors($msg.'失败~');
         }
