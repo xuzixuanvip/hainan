@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Admin;
 use DemeterChain\B;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Body;
+use App\Models\kfBody;
 use App\Http\Controllers\Admin\Traits\MessageTraits;
-use App\Http\Requests\BodyRequest;
+use App\Http\Requests\kfBodyRequest;
 use App\Models\Kfsymptom;
 use  App\Models\BodySymptom;
 
@@ -15,7 +15,7 @@ class BodyController extends Controller
 {
     use MessageTraits;
     //
-    public function index(Body $body)
+    public function index(kfBody $body)
     {
         $body = $body->table();
         return view('admin.body.index',compact('body'));
@@ -23,49 +23,49 @@ class BodyController extends Controller
 
     public function create()
     {
-        $body_son = Body::PrentBody();
+        $body_son = kfBody::PrentBody();
         return view('admin.body.add',compact('body_son'));
     }
 
-    public function store(BodyRequest $request,Body $body)
+    public function store(kfBodyRequest $request,kfBody $body)
     {
         $body->fill($request->except('_token'));
         $body->save();
         return $this->redirect_msg($body,route('body.index'),'创建');
     }
 
-    public function edit(Body $body)
+    public function edit(kfBody $body)
     {
         return view('admin.body.edit',compact('body'));
     }
 
-    public function update(BodyRequest $request,Body $body)
+    public function update(kfBodyRequest $request,kfBody $body)
     {
         $body->update($request->except('_token','_method'));
         return $this->redirect_msg($body,route('body.index'),'修改');
     }
 
 
-    public function delete(Request $request,Body $body)
+    public function delete(Request $request,kfBody $body)
     {
         $body->find($request->id)->delete();
         return $this->json_msg($body);
     }
 
 
-    public function deleteAll(Request $request,Body $body)
+    public function deleteAll(Request $request,kfBody $body)
     {
         return $body->delete_All($request->ids);
     }
 
-    public function add_symptom(Body $body)
+    public function add_symptom(kfBody $body)
     {
         $result = Kfsymptom::get();
         $symptom = $body->symptom;
         return view('admin.body.symptom',compact('body','result','symptom'));
     }
 
-    public function symptom_store(Request $request,BodySymptom $bodysymptom,Body $body)
+    public function symptom_store(Request $request,BodySymptom $bodysymptom,kfBody $body)
     {
         $bodysymptom->where('body_id',$request->id)->delete();
         $body->find($request->id)->symptom()->attach($request->symptom_id);

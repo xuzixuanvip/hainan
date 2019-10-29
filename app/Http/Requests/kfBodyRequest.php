@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class BodyRequest extends FormRequest
+class kfBodyRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,12 +26,12 @@ class BodyRequest extends FormRequest
         switch ($this->method()) {
             case 'PUT' :
                 return [
-                    'name'     => 'required|unique:bodys,name',
+                    'name'     => 'required|unique:kf_bodys,name',
                     'sex'    => 'required|numeric',
                 ];
             case 'POST' :
                 return [
-                    'name'     => 'required|unique:bodys,name',
+                    'name'     => 'required|unique:kf_bodys,name',
                     'sex'    => 'required|numeric',
                     'pid'  => 'required|numeric',
                 ];

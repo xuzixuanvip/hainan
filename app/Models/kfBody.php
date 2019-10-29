@@ -7,16 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 use App\Filters\Filters;
 
 
-class Body extends Model
+class kfBody extends Model
 {
 
     use BodyAttribute;
 
     //
-    protected $table = 'bodys';
+    protected $table = 'kf_bodys';
 
     protected $fillable = ['name', 'sex','pid'];
 
+    public $timestamps = false;
 
     public function table($pid = 0)
     {

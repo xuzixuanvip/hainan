@@ -3,8 +3,8 @@
 namespace App\Providers;
 
 use App\Http\Traits\Status;
-use App\Models\Body;
-use App\Observers\BodyObserver;
+use App\Models\kfBody;
+use App\Observers\kfBodyObserver;
 use Illuminate\Support\ServiceProvider;
 use App\Models\Task;
 use App\Models\System;
@@ -28,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
 
         Carbon::setLocale('zh');
 
-        Body::observe(BodyObserver::class);
+        kfBody::observe(kfBodyObserver::class);
 
         $taskStatus = Status::taskStatus();        
         View::share('taskStatus',$taskStatus);  
