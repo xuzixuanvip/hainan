@@ -9,5 +9,4 @@ class BodyFilters extends Filters
         return $this->builder->where('name', 'like', '%'.$name.'%');
     }
 
-
 }

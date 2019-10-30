@@ -2,6 +2,8 @@
 
 namespace App\Models\Traits;
 
+use App\Filters\Filters;
+
 trait BodyAttribute
 {
 

@@ -10,14 +10,20 @@ use App\Http\Controllers\Admin\Traits\MessageTraits;
 use App\Http\Requests\kfBodyRequest;
 use App\Models\Kfsymptom;
 use  App\Models\BodySymptom;
+use App\Filters\BodyFilters;
+
 
 class BodyController extends Controller
 {
     use MessageTraits;
     //
-    public function index(kfBody $body)
+    public function index(BodyFilters $filters,kfBody $body)
     {
-        $body = $body->table();
+        if(request()->name){
+            $body = $body->Filter($filters)->paginate(10);
+        }else {
+            $body = $body->table();
+        }
         return view('admin.body.index',compact('body'));
     }
 
@@ -53,10 +59,16 @@ class BodyController extends Controller
     }
 
 
-    public function deleteAll(Request $request,kfBody $body)
-    {
-        return $body->delete_All($request->ids);
-    }
+//    public function deleteAll(Request $request,kfBody $body)
+//    {
+////        if(is_array($request->ids)){
+////            $prent_id = $prent_id->pluck('id');
+////        } else {
+////        }
+//
+////        $body->delete_son_id($request->id);
+//        return $body->delete_All($request->ids);
+//    }
 
     public function add_symptom(kfBody $body)
     {

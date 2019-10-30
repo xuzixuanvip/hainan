@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Traits\BodyAttribute;
 use Illuminate\Database\Eloquent\Model;
 use App\Filters\Filters;
+use phpDocumentor\Reflection\Types\Void_;
 
 
 class kfBody extends Model
@@ -32,19 +33,29 @@ class kfBody extends Model
         return $prent;
     }
 
-    public function delete_All($ids)
+//    public function delete_All($ids)
+//    {
+//        $this->delete_son_id($ids);
+//        $prent = $this->whereIn('id',$ids)->delete();
+//        $son = $this->whereIn('pid',$ids)->delete();
+//        if($prent){
+//            return response()->json(['code'=>200])->setEncodingOptions(JSON_UNESCAPED_UNICODE);
+//        } else {
+//            return response()->json(['code'=>400])->setEncodingOptions(JSON_UNESCAPED_UNICODE);
+//        }
+//    }
+
+
+    public function delete_son_id($id)
     {
-        $prent = $this->whereIn('id',$ids)->delete();
-        $son = $this->whereIn('pid',$ids)->delete();
-        if($prent){
-            return response()->json(['code'=>200])->setEncodingOptions(JSON_UNESCAPED_UNICODE);
-        } else {
-            return response()->json(['code'=>400])->setEncodingOptions(JSON_UNESCAPED_UNICODE);
+        $prent_id = $this->find($id);
+        $son_ids = [];
+        $data = $this->whereIn('pid',array($prent_id->id))->get();
+        foreach ($data  as $v) {
+            $son_ids[] = $v->id;
         }
+        \DB::table('body_symptom')->whereIn('body_id',$son_ids)->delete();
     }
-
-
-
 
 
 }

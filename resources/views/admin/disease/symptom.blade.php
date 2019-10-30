@@ -36,19 +36,19 @@
                             <div class="form-group col-md-6">
                                 <label class="col-md-3 control-label">症状选择</label><br><br><br>
                                 @foreach($result as $v)
-                                <div class="col-md-9">
-                                    <input type="checkbox" value="{{$v->id}}" {{in_array($v->id,$rsrs) ? 'checked=""' : ''}}" name="symptom_id[]" checkbox="checkbox"/>{{$v->name}}
+                                <div class="col-md-3">
+                                    <input type="checkbox" value="{{$v->id}}" {{in_array($v->id,$rsrs) ? 'checked=""' : ''}} name="symptom_id[]" checkbox="checkbox"/>{{$v->name}}
+                                    <input type="text" class="form-control" name="probability{{ $v->id }}" @if(in_array($v->id,$rsrs)) required="" @endif value="@foreach($proba as $vv){{ $v->id == $vv->symptom_id ? $vv->probability : '' }}@endforeach" style="width:70px;float:right;height: 25px">
                                 </div>
                                 @endforeach
                             </div>
-                            <div class="form-group col-md-6">
-                                <label class="col-md-3 control-label">症状匹配病症几率</label>
-                                    @foreach($result as $v)
-                                        <div class="col-md-9">
-                                            <input type="text" class="form-control" name="probabliity" required="" value="">
-                                        </div>
-                                    @endforeach
-                            </div>
+{{--                            <div class="form-group col-md-6">--}}
+{{--                                <label class="col-md-3 control-label">症状匹配病症几率</label>--}}
+{{--                                    @foreach($result as $v)--}}
+{{--                                        <div class="col-md-9">--}}
+{{--                                        </div>--}}
+{{--                                    @endforeach--}}
+{{--                            </div>--}}
 
                             <div class="form-group text-center col-md-12">
 

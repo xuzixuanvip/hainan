@@ -107,6 +107,8 @@ class SymptomController extends Controller
      */
     public function destroy($id)
     {
+        \DB::table('body_symptom')->where('symptom_id',$id)->delete();
+        \DB::table('symptom_diseases')->where('symptom_id',$id)->delete();
         $rs = Kfsymptom::destroy($id);
         if ($rs) {
             return redirect('zadmin/symptom');

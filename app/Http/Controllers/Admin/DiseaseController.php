@@ -6,9 +6,11 @@ use App\Models\Kfsymptom;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Admin\Traits\MessageTraits;
 
 class DiseaseController extends Controller
 {
+    use MessageTraits;
     /**
      * Display a listing of the resource.
      *
@@ -106,6 +108,7 @@ class DiseaseController extends Controller
      */
     public function destroy($id)
     {
+         Kfdisease::find($id)->symptom_disease()->detach();
         $flag = Kfdisease::destroy($id);
         if ($flag){
             return redirect('zadmin/disease');
@@ -130,12 +133,14 @@ class DiseaseController extends Controller
 
         $result = Kfsymptom::all();
 
+        $proba = DB::table('symptom_diseases')->where('diseases_id',$id)->get();
         $rs = $data->symptom_disease()->get();
         $rsrs = [];
         foreach ($rs as $k=>$v){
             $rsrs[] = $v->id;
+//            $rsrs[]['pro'] = $proba$v->id;
         }
-        return view('admin.disease.symptom',compact('data','result','rsrs'));
+        return view('admin.disease.symptom',compact('data','result','rsrs','proba'));
     }
 
     public function insertdata(Request $request,$id)
@@ -147,6 +152,7 @@ class DiseaseController extends Controller
         foreach($symptom_id as $k=>$v){
             $arr['diseases_id'] = $disease_id;
             $arr['symptom_id'] = $v;
+            $arr['probability'] = $request->input('probability'.$v);
             $member[] = $arr;
         }
         $delete = DB::table('symptom_diseases')->where('diseases_id',$id)->delete();

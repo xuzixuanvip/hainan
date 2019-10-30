@@ -46,15 +46,16 @@
             <div class="card-box">
                 <div class="row">
                     <div class="col-sm-4">
-{{--                        <form role="form">--}}
-{{--                            <div class="form-group contact-search col-sm-8 m-b-30">--}}
-{{--                                    <input type="text" id="search" class="form-control"  name="keyword" value="" placeholder="输入疾病名搜索">--}}
+                        <form role="form" action="{{ route('body.index') }}" method="get">
+                            <div class="form-group contact-search col-sm-8 m-b-30">
+{{--                                {{ csrf_field() }}--}}
+                                    <input type="text" id="name" class="form-control"  name="name" value="{{ request()->name ??  request()->name }}" placeholder="输入疾病名搜索">
 
-{{--                            </div>--}}
-{{--                            <div class="col-sm-4">--}}
-{{--                                <button type="submit" class="btn btn-white"><i class="fa fa-search"></i></button>--}}
-{{--                            </div> <!-- form-group -->--}}
-{{--                        </form>--}}
+                            </div>
+                            <div class="col-sm-4">
+                                <button type="submit" class="btn btn-white"><i class="fa fa-search"></i></button>
+                            </div> <!-- form-group -->
+                        </form>
                     </div>
 
                     <div class="col-sm-7">
@@ -78,10 +79,10 @@
                     <table class="table table-hover">
                         <thead>
                         <tr>
-                            <th style="min-width: 35px;">
-                                <input id="checkAll" type="checkbox" value=""/>全选
+{{--                            <th style="min-width: 35px;">--}}
+{{--                                <input id="checkAll" type="checkbox" value=""/>全选--}}
 
-                            </th>
+{{--                            </th>--}}
                             <th>身体部位</th>
                             <th>部位性别</th>
                             <th>对应症状</th>
@@ -93,14 +94,14 @@
 
                         @foreach($body as $v)
                             <tr>
-                                <td>
+{{--                                <td>--}}
 
-                                    <input  name="ids[]" type="checkbox" value="{{$v->id}}" class="check_class">
+{{--                                    <input  name="ids[]" type="checkbox" value="{{$v->id}}" class="check_class">--}}
 
-                                </td>
+{{--                                </td>--}}
 
                                 <td onclick="display({{ $v->id }})">
-                                    {{$v->name}} ( {{ count($v->son) }} )
+                                    {{$v->name}}  {{ isset($v->son) ? '('. count($v->son) .')' : '' }}
                                 </td>
                                 <td>
                                     {{ $v->sex }}
@@ -114,23 +115,25 @@
                                                data-token="" ><i class="md md-close"></i>删除</a>
                                 </td>
                             </tr>
-                            @foreach($v->son as $vv)
-                                <tr class="son_{{ $v->id }}" hidden="">
-                                    <td>
-                                        <input  name="ids[]" type="checkbox" value="{{$vv->id}}" class="check_class">
-                                    </td>
-                                    <td>&nbsp;&nbsp;&nbsp;|-----{{$vv->name}}</td>
-                                    <td>{{ $vv->sex }}</td>
-                                    <td>
-                                        <a href="{{ route('body.add_symptom',$vv->id) }}">对应症状添加 ({{ $vv->symptom->count() }})</a>
-                                    </td>
-                                    <td>
-                                        <a href="{{ route('body.edit',$vv->id) }}" ><i class="md md-edit"></i>编辑</a>
-                                        <a type="submit" href="javascript:;" onclick="return delete_body('{{ $vv->id }}')"  data-method="delete"
-                                                   data-token=""><i class="md md-close"></i>删除</a>
-                                    </td>
-                                </tr>
-                            @endforeach
+                            @if( isset($v->son) )
+                                @foreach($v->son as $vv)
+                                    <tr class="son_{{ $v->id }}" hidden="">
+    {{--                                    <td>--}}
+    {{--                                        <input  name="ids[]" type="checkbox" value="{{$vv->id}}" class="check_class">--}}
+    {{--                                    </td>--}}
+                                        <td>&nbsp;&nbsp;&nbsp;|-----{{$vv->name}}</td>
+                                        <td>{{ $vv->sex }}</td>
+                                        <td>
+                                            <a href="{{ route('body.add_symptom',$vv->id) }}">对应症状添加 ({{ $vv->symptom->count() }})</a>
+                                        </td>
+                                        <td>
+                                            <a href="{{ route('body.edit',$vv->id) }}" ><i class="md md-edit"></i>编辑</a>
+                                            <a type="submit" href="javascript:;" onclick="return delete_body('{{ $vv->id }}')"  data-method="delete"
+                                                       data-token=""><i class="md md-close"></i>删除</a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @endif
                         @endforeach
 
 
@@ -142,7 +145,7 @@
                         </tbody>
                     </table>
 
-                    <button type="button" class="btn-danger bathDel">批量删除</button>
+{{--                    <button type="button" class="btn-danger bathDel">批量删除</button>--}}
 
                 </div>
 
