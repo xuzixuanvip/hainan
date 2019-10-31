@@ -1,6 +1,34 @@
 @extends('admin.layouts.app')
 @section('content')
+    @if (Session::has('message'))
+        <div class="alert alert-info">
+            <button type="button" onclick="alert(132)" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            {{ Session::get('message') }}
+        </div>
+    @endif
 
+    @if (Session::has('success'))
+        <div class="alert alert-success">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            {{ Session::get('success') }}
+        </div>
+    @endif
+
+    @if (Session::has('danger'))
+        <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            {{ Session::get('danger') }}
+        </div>
+    @endif
+    @if (count($errors) > 0)
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <!-- Page-Title -->
     <div class="row">
         <div class="col-sm-12">
@@ -18,9 +46,9 @@
             <div class="card-box">
                 <div class="row">
                     <div class="col-sm-4">
-                        <form role="form">
+                        <form role="form" href="{{ route('department.index') }}">
                             <div class="form-group contact-search col-sm-8 m-b-30">
-                                <input type="text" id="search" class="form-control"  name="keyword" value="" placeholder="输入科室名搜索">
+                                <input type="text" id="search" class="form-control"  name="name" value="{{ Request()->name ?? '' }}" placeholder="输入科室名搜索">
 
                             </div>
                             <div class="col-sm-4">
@@ -32,7 +60,7 @@
                     <div class="col-sm-7">
 
                         <div class="col-sm-1" style="float: right">
-                            <a href="{{url('zadmin/disease/create')}}" class="btn btn-primary btn-md waves-effect waves-light m-b-30"
+                            <a href="{{  route('department.create') }}" class="btn btn-primary btn-md waves-effect waves-light m-b-30"
                             ><i class="md md-add"></i>添加</a>
                         </div>
 
@@ -50,50 +78,34 @@
                     <table class="table table-hover">
                         <thead>
                         <tr>
-                            <th style="min-width: 35px;">
-                                <input id="checkAll" type="checkbox" value=""/>全选
-
-                            </th>
                             <th>科室名称</th>
+                            <th>性别</th>
                             <th>对应疾病</th>
                             <th style="width: 200px;">操作</th>
                         </tr>
                         </thead>
 
-                        @if(!$department)
+                        @if($dep)
                         <tbody>
-                            @foreach($department as $v)
+                            @foreach($dep as $v)
                                 <tr>
-                                    <td>
-
-                                        <input  name="ids[]" type="checkbox" value="{{$v->id}}" class="check_class">
-
-                                    </td>
 
                                     <td>
                                         {{$v->name}}
                                     </td>
+                                    <td>{{ $v->sex }}</td>
                                     <td>
-                                        @if($v->sex == 0)
-                                            不限
-                                        @elseif($v->sex == 1)
-                                            男
-                                        @else
-                                            女
-                                        @endif
+                                        <a href="{{url('zadmin/disease/symptom/'.$v->id)}}">对应疾病添加</a>
                                     </td>
                                     <td>
-                                        <a href="{{url('zadmin/disease/symptom/'.$v->id)}}">对应症状添加</a>
-                                    </td>
-                                    <td>
-                                        <a href="{{url('zadmin/disease/'.$v->id.'/edit')}}" ><i class="md md-edit"></i>编辑</a>
-                                        <a href="{{url('zadmin/disease',$v->id)}}" data-method="delete"
-                                           data-token="{{csrf_token()}}" data-confirm="确定删除吗?"><i class="md md-close"></i>删除</a>
+                                        <a href="{{ route('department.edit',$v->id) }}" ><i class="md md-edit"></i>编辑</a>
+                                        <a type="submit" href="javascript:;" onclick="return delete_body('{{ $v->id }}')"  data-method="delete"
+                                           data-token=""><i class="md md-close"></i>删除</a>
                                     </td>
                                 </tr>
 
                             @endforeach
-                            {!!  $department->appends(Request::all())->render()  !!}
+                            {!!  $dep->appends(Request::all())->render()  !!}
                         @else
 
                             暂无数据~
@@ -103,7 +115,6 @@
                         </tbody>
                     </table>
 
-                    <button type="button" class="btn-danger bathDel">批量删除</button>
 
                 </div>
 
@@ -186,7 +197,19 @@
             console.info(ids);
         });
 
+        function delete_body(id) {
+            if(!confirm('您确定要删除'+id)){
+                return false;
+            }
 
+            $.post('{{ route('department.delete') }}',{'id':id,'_token':'{{ csrf_token() }}','_method':'DELETE'},function (data) {
+                if(data.code == 200){
+                    window.location.href = '{{ route('department.index') }}';
+                }
+            },'json');
+
+            return false;
+        }
 
     </script>
 @endsection

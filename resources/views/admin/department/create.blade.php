@@ -4,11 +4,11 @@
     <!-- Page-Title -->
     <div class="row">
         <div class="col-sm-12">
-            <h4 class="page-title">疾病管理</h4>
+            <h4 class="page-title">科室管理</h4>
             <ol class="breadcrumb">
                 <li><a href="{{url('zadmin/')}}">系统</a></li>
-                <li><a href="{{url('zadmin/goods')}}">疾病列表</a></li>
-                <li class="active">新建疾病</li>
+                <li><a href="{{route('department.index')}}">科室列表</a></li>
+                <li class="active">新建科室</li>
             </ol>
         </div>
     </div>
@@ -25,13 +25,14 @@
                 @endif
                 <div class="row">
                     <div class="col-md-12">
-                        <form class="form-horizontal" role="form" action="{{url('zadmin/disease/')}}" method="post" enctype="multipart/form-data">
+                        <form class="form-horizontal" role="form" action="{{ route('department.store')}}" method="post" enctype="multipart/form-data">
                             <div class="form-group col-md-6">
-                                <label class="col-md-3 control-label">疾病名称</label>
+                                <label class="col-md-3 control-label">科室名称</label>
                                 <div class="col-md-9">
                                     <input type="text" class="form-control" name="name" required="" value="{{ old('name') }}">
                                 </div>
                             </div>
+
                             <div class="form-group col-md-6">
                                 <label class="col-md-3 control-label">性别</label>
                                 <div class="col-md-9">
@@ -44,29 +45,13 @@
                             </div>
 
                             <div class="form-group col-md-6">
-                                <label class="col-md-3 control-label">伴随症状</label>
+                                <label class="col-md-3 control-label">地址</label>
                                 <div class="col-md-9">
-                                    <textarea type="text" class="form-control" name="concomitant"  value="{{ old('concomitant') }}"></textarea>
+                                    <input type="text" class="form-control" name="href" required="" value="{{ old('name') }}">
+
                                 </div>
                             </div>
-                            <div class="form-group col-md-6">
-                                <label class="col-md-3 control-label">临床表现</label>
-                                <div class="col-md-9">
-                                    <textarea type="text" class="form-control" name="clinical"  value="{{ old('clinical') }}"></textarea>
-                                </div>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label class="col-md-3 control-label">疾病原因</label>
-                                <div class="col-md-9">
-                                    <textarea type="text" class="form-control" name="cause"  value="{{ old('cause') }}"></textarea>
-                                </div>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label class="col-md-3 control-label">疾病治疗</label>
-                                <div class="col-md-9">
-                                    <textarea type="text" class="form-control" name="treatment"  value="{{ old('treatment') }}"></textarea>
-                                </div>
-                            </div>
+
 
                             <div class="form-group text-center col-md-12">
 

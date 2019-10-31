@@ -144,9 +144,8 @@ Route::prefix('zadmin')->namespace('Admin')->group(function(){
         Route::post('disease/symptom/insertdata/{id}','DiseaseController@insertdata');
 //=======智能导诊---科室控制====================================
         Route::resource('department','DepartmentController',['only'=>['index','create','store','edit','update']]);
-
-
-
+        Route::resource('tags','TagsController');
+        Route::delete('department/delete','DepartmentController@delete')->name('department.delete');
 
 
 
@@ -265,6 +264,8 @@ Route::prefix('zadmin')->namespace('Admin')->group(function(){
 // 公开的
 Route::get('diancan-orders','DiancanOrderController@index');
 Route::get('task-list',   'Admin\TaskPublicController@index');
+
+Route::get('daozhen','Dz\DzController@index');
 
 
 

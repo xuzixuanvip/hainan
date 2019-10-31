@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+use App\Models\Kfdepartment;
 use App\Models\Kfdisease;
 use App\Models\Kfsymptom;
 use Illuminate\Http\Request;
@@ -33,9 +34,10 @@ class DiseaseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Kfdepartment $department)
     {
-        return view('admin.disease.add');
+        $department =  $department->get();
+        return view('admin.disease.add',compact('department'));
     }
 
     /**
@@ -50,6 +52,7 @@ class DiseaseController extends Controller
         $rs['msg'] = '操作失败';
         $request = $request->except($request->_token);
         $flag = Kfdisease::create($request);
+        \DB::table('diseases_department')->insert(['diseases_id'=>$flag->id,'department_id'=>$request['department_id']]);
         if ($flag){
             $rs['status'] = 'success';
             $rs['msg'] = '操作成功';
@@ -76,11 +79,12 @@ class DiseaseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id,Kfdepartment $department)
     {
         $data = Kfdisease::find($id);
-
-        return view('admin.disease.edit',compact('data'));
+        $department =  $department->get();
+        $department_id =  \DB::table('diseases_department')->where('diseases_id',$id)->get()->pluck('department_id')->all();
+        return view('admin.disease.edit',compact('data','department','department_id'));
     }
 
     /**
@@ -92,9 +96,10 @@ class DiseaseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data = $request->except('_token','_method');
+        $data = $request->except('_token','_method','department_id');
         $flag = Kfdisease::where('id',$id)->update($data);
-        if ($flag){
+        $flag2= \DB::table('diseases_department')->where('diseases_id',$id)->update(['department_id'=>$request->department_id]);
+        if ($flag || $flag2){
             return redirect('zadmin/disease');
         }
         return back()->withInput();
@@ -109,6 +114,7 @@ class DiseaseController extends Controller
     public function destroy($id)
     {
          Kfdisease::find($id)->symptom_disease()->detach();
+        \DB::table('diseases_department')->where('diseases_id',$id)->delete();
         $flag = Kfdisease::destroy($id);
         if ($flag){
             return redirect('zadmin/disease');

@@ -13,6 +13,9 @@ class Kfdepartment extends Model
     public $timestamps = false;
     protected $guarded = [];
 
+
+    protected $fillable = ['name', 'sex','href'];
+
     public function diseases()
     {
         return $this->belongsToMany('App\Models\kfdiseases','diseases_department','department_id','diseases_id');
@@ -24,5 +27,12 @@ class Kfdepartment extends Model
         return $filters->apply($query);
     }
 
+    public function getSexAttribute($value)
+    {
+        $status = ['0'=>'不限','1'=>'男','2'=>'女'];
+
+        return $status[$value];
+
+    }
 
 }

@@ -43,6 +43,40 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="form-group col-md-6">
+                                <label class="col-md-3 control-label">推荐科室</label>
+                                <div class="col-md-9">
+                                    <select class="form-control" name="department_id">
+                                        @foreach($department as $v)
+                                            <option value="{{ $v->id }}" {{ $department_id[0] == $v->id ? 'selected' : '' }} >{{ $v->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="col-md-3 control-label">伴随症状</label>
+                                <div class="col-md-9">
+                                    <textarea type="text" class="form-control" name="concomitant"  value="">{{ old('concomitant',$data->concomitant) }}</textarea>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="col-md-3 control-label">临床表现</label>
+                                <div class="col-md-9">
+                                    <textarea type="text" class="form-control" name="clinical"  value="">{{ old('clinical',$data->clinical) }}</textarea>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="col-md-3 control-label">疾病原因</label>
+                                <div class="col-md-9">
+                                    <textarea type="text" class="form-control" name="cause"  value="">{{ old('cause',$data->cause) }}</textarea>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="col-md-3 control-label">疾病治疗</label>
+                                <div class="col-md-9">
+                                    <textarea type="text" class="form-control" name="treatment"  value="">{{ old('treatment',$data->treatment) }}</textarea>
+                                </div>
+                            </div>
                             {{csrf_field()}}
                             <div class="form-group text-center col-md-12">
                                 <button type="submit" class="btn btn-info waves-effect waves-light">保存</button>
