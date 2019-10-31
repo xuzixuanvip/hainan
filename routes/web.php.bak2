@@ -266,6 +266,9 @@ Route::get('diancan-orders','DiancanOrderController@index');
 Route::get('task-list',   'Admin\TaskPublicController@index');
 
 Route::get('daozhen','Dz\DzController@index');
+Route::post('api/daozhen/tags','Dz\ApiDzController@tags')->name('api.tags');
+Route::post('api/daozhen/symptom','Dz\ApiDzController@symptom')->name('api.symptom');
+Route::post('api/daozhen/search','Dz\ApiDzController@search')->name('api.search');
 
 
 

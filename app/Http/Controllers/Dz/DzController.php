@@ -9,6 +9,7 @@ class DzController extends Controller
 {
     public function index()
     {
+
         return view('daozhen.index');
     }
 }

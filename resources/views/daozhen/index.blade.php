@@ -79,7 +79,8 @@
         }
         // tab导航获取
         $.ajax({
-            url: '/intelligenceserver/search/hotTypeSearch',
+            url: '{{ route('api.tags') }}',
+            data:{'_token':'{{ csrf_token() }}'},
             type: 'POST',
             dataType: 'json',
             beforeSend:function(){
@@ -89,19 +90,20 @@
                 var data = res.data;
                 $.each(data, function(index, el) {
                     var tab_li = $("<li data-id='" + el.id + "'><span><img src='" + el.photo + "'></span><span>" + el.name + "</span></li>");
-                    $(".tab").append(tab_li);
+                    $(".tab").prepend(tab_li);
                 });
                 $(".tab").find('li').eq(2).addClass('cur');
                 // tab切换内容初始化
                 var li_id = $(".tab").find('li').eq(2).data('id');
                 $.ajax({
-                    url: '/intelligenceserver/search/hotWordByType',
+                    url: '{{ route('api.symptom') }}',
                     type: 'POST',
                     dataType: 'json',
-                    data:{id:li_id},
+                    data:{id:li_id,'_token':'{{ csrf_token() }}'},
                     success: function(res) {
                         stoploading();
                         var data = res.data;
+                        console.log(data);
                         $.each(data, function(index, el) {
                             var keyword_a = $("<a href='/intelligenceserver/view/moreProbality?symptom_word="+el+"'>" + el + "</a>");
                             $(".con").eq(2).append(keyword_a);
@@ -126,13 +128,13 @@
             var li_id = $(this).data('id');
 
             $.ajax({
-                url: '/intelligenceserver/search/hotWordByType',
+                url: '{{ route('api.symptom') }}',
                 type: 'POST',
                 dataType: 'json',
                 beforeSend:function(){
                     loading();
                 },
-                data:{id:li_id},
+                data:{'_token':'{{ csrf_token() }}'},
                 success: function(res) {
                     stoploading();
                     $(".con").eq(index2).html("");
@@ -157,13 +159,13 @@
             $(".search_result").find(".one_a").html("");
             $(".search_result").find(".two_a").html("");
             $.ajax({
-                url: '/intelligenceserver/search',
+                url: '{{ route('api.search') }}',
                 type: 'POST',
                 dataType: 'json',
                 beforeSend:function(){
                     loading();
                 },
-                data: {keyword: input_val},
+                data: {keyword: input_val,'_token':'{{ csrf_token() }}'},
                 success: function(res) {
                     stoploading();
                     $(".search_result").show();

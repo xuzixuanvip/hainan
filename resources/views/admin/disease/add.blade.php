@@ -42,7 +42,16 @@
                                     </select>
                                 </div>
                             </div>
-
+                            <div class="form-group col-md-6">
+                                <label class="col-md-3 control-label">推荐科室</label>
+                                <div class="col-md-9">
+                                    <select class="form-control" name="department_id">
+                                        @foreach($department as $v)
+                                            <option value="{{ $v->id }}" >{{ $v->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
                             <div class="form-group col-md-6">
                                 <label class="col-md-3 control-label">伴随症状</label>
                                 <div class="col-md-9">
