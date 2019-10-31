@@ -29,10 +29,9 @@
                             <div class="form-group col-md-6">
                                 <label class="col-md-3 control-label">疾病名称</label>
                                 <div class="col-md-9">
-                                    <input type="text" class="form-control" name="name" required="" value="{{old('name')}}">
+                                    <input type="text" class="form-control" name="name" required="" value="{{ old('name') }}">
                                 </div>
                             </div>
-
                             <div class="form-group col-md-6">
                                 <label class="col-md-3 control-label">性别</label>
                                 <div class="col-md-9">
@@ -43,6 +42,41 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="form-group col-md-6">
+                                <label class="col-md-3 control-label">推荐科室</label>
+                                <div class="col-md-9">
+                                    <select class="form-control" name="sex">
+                                        <option value="1" >男</option>
+                                        <option value="2" >女</option>
+                                        <option value="0" >不限</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="col-md-3 control-label">伴随症状</label>
+                                <div class="col-md-9">
+                                    <textarea type="text" class="form-control" name="name" required="" value=""></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="col-md-3 control-label">临床表现</label>
+                                <div class="col-md-9">
+                                    <textarea type="text" class="form-control" name="name" required="" value=""></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="col-md-3 control-label">疾病原因</label>
+                                <div class="col-md-9">
+                                    <textarea type="text" class="form-control" name="name" required="" value=""></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="col-md-3 control-label">疾病治疗</label>
+                                <div class="col-md-9">
+                                    <textarea type="text" class="form-control" name="name" required="" value=""></textarea>
+                                </div>
+                            </div>
+
                             <div class="form-group text-center col-md-12">
 
                                 <button type="submit" class="btn btn-info waves-effect waves-light">保存</button>

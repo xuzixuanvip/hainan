@@ -142,7 +142,8 @@ Route::prefix('zadmin')->namespace('Admin')->group(function(){
 // ========================================
         Route::get('disease/symptom/{id}','DiseaseController@dorela');
         Route::post('disease/symptom/insertdata/{id}','DiseaseController@insertdata');
-
+//=======智能导诊---科室控制====================================
+        Route::resource('department','DepartmentController',['only'=>['index','create','store','edit','update']]);
 
 
 

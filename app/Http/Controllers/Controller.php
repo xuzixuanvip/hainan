@@ -7,10 +7,10 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Helpers\Common;
-
+use App\Http\Controllers\Admin\Traits\MessageTraits;
 class Controller extends BaseController
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests,Common;
+    use AuthorizesRequests, DispatchesJobs, ValidatesRequests,Common, MessageTraits;
     const DEPART_MANAGER = '100';
     const EMPLOYEE       = '1'; // 业务人员
 
