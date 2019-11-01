@@ -14,7 +14,7 @@ class Kfsymptom extends Model
 
     public function symptom_disease()
     {
-        return $this->belongsToMany('App\Models\Kfsymptom','symptom_diseases','diseases_id','symptom_id');
+        return $this->belongsToMany('App\Models\Kfdisease','symptom_diseases','symptom_id','diseases_id');
     }
 
     public function body_symptom()
@@ -30,4 +30,5 @@ class Kfsymptom extends Model
     {
         return $this->belongsToMany('App\Models\Kftags','tags_diseases','tags_id','symptom_id');
     }
+
 }

@@ -11,7 +11,7 @@ class Kfdisease extends Model
     public $timestamps = false;
     protected $guarded = [];
 
-    protected $fillable = ['name', 'sex','cate_id','department_id','treatment','cause','clinical','concomitant'];
+    protected $fillable = ['name', 'sex','cate_id','treatment','cause','clinical','concomitant'];
 
     public function symptom_disease()
     {

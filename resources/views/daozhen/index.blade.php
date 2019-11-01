@@ -24,7 +24,7 @@
 </section>
 <div class="ageset"><button id="ageset">性别年龄设置</button></div>
 <section class="index_rtt">
-    <a href="/intelligenceserver/view/body">
+    <a href="{{ route('daozhen.body') }}">
         <h2>人体图查症状</h2>
         <p>按部位查看相应症状或疾病</p>
     </a>

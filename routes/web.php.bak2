@@ -265,11 +265,17 @@ Route::prefix('zadmin')->namespace('Admin')->group(function(){
 Route::get('diancan-orders','DiancanOrderController@index');
 Route::get('task-list',   'Admin\TaskPublicController@index');
 
-Route::get('daozhen','Dz\DzController@index');
+Route::get('daozhen','Dz\DzController@index')->name('daozhen.index');
 Route::post('api/daozhen/tags','Dz\ApiDzController@tags')->name('api.tags');
 Route::post('api/daozhen/symptom','Dz\ApiDzController@symptom')->name('api.symptom');
 Route::post('api/daozhen/search','Dz\ApiDzController@search')->name('api.search');
-
+Route::post('api/daozhen/bodysearch','Dz\ApiDzController@bodySearch')->name('api.bodysearch');
+Route::post('api/daozhen/bodytab','Dz\ApiDzController@bodyTab')->name('api.bodyTab');
+Route::get('daozhen/body','Dz\DzController@body')->name('daozhen.body');
+Route::get('daozhen/body/list','Dz\DzController@bodyList')->name('daozhen.body.list');
+Route::get('daozhen/symptom','Dz\DzController@symptom')->name('daozhen.symptom');
+Route::post('api/symptom/search','Dz\ApiDzController@symptomSearch')->name('api.symptomSearch');
+Route::post('api/symptom/fenxi','Dz\ApiDzController@fenxi')->name('api.fenxi');
 
 
 

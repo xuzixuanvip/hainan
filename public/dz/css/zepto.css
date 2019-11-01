@@ -254,9 +254,9 @@ header a{ display:block; width: 100% height: 4rem; line-height: 4rem}
 .male_chart,.female_chart{width: 24rem; height:45rem; margin:0 auto; position: relative;}
 .allbody{line-height: 3rem;position: absolute; width: 6rem; height: 6rem; right: 1rem;
     display: block; text-align: center;z-index: 666; bottom:2rem;}
-#male_tab:before,#female_tab:before{ content: "";background:url(./img/qie.png) no-repeat center center; width: 6rem; height: 3rem; background-size: auto 100%; display: block;
+#male_tab:before,#female_tab:before{ content: "";background:url(../img/qie.png) no-repeat center center; width: 6rem; height: 3rem; background-size: auto 100%; display: block;
 }
-.allbody:before{ content: "";background:url(./img/allbody.png) no-repeat center center; width: 6rem; height: 4rem; background-size: auto 100%; display: block;
+.allbody:before{ content: "";background:url(../img/allbody.png) no-repeat center center; width: 6rem; height: 4rem; background-size: auto 100%; display: block;
 }
 .sexandage {
     padding: 0.5rem;
