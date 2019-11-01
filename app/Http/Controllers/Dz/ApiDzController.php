@@ -7,6 +7,7 @@ use App\Models\Kfdisease;
 use App\Models\Kfsymptom;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use function MongoDB\BSON\fromJSON;
 
 class ApiDzController extends Controller
 {
@@ -19,7 +20,7 @@ class ApiDzController extends Controller
 
     public function symptom(Request $request)
     {
-        $symptom = \DB::table('kf_symptom')->get()->pluck('name');
+        $symptom = \DB::table('kf_symptom')->get()->pluck('name','id');
 
         return $this->success($symptom);
     }
@@ -71,11 +72,30 @@ class ApiDzController extends Controller
         return $this->success($data);
     }
 
-    public function fenxi(Request $request)
+    public function fenxi(Request $request,Kfsymptom $symptom)
     {
-        
-        return $request->all();
+        $symptom_data = $symptom->select('id','name')->find($request->symptom_id)->symptom_disease->all();
+        $data = [];
+        foreach ($symptom_data as $k=> $v) {
+            $data['symptoms'] = $v->symptom_disease->pluck('name');
+            $data['diseases'] = $symptom_data;
+            $data['diseases'][$k]['pro'] = $v->pivot->probability;
+            $data['diseases'][$k]['symptoms_text'] = $v->symptom_disease->pluck('name');
+        }
+        return $this->success($data);
+
     }
+
+
+    public function diseaseRetrieve(Request $request,Kfdisease $disease)
+    {
+        $data = [];
+        $data['xgzds'] = $disease->find($request->diseases_id);
+        $data['jzkses'] =   $data['xgzds']->department->pluck('name');
+        $data['symptoms'] =  $data['xgzds']->symptom_disease->pluck('name');
+        return $this->success($data);
+    }
+
 
     public function response($model,$msg='',$data='',$code='')
     {

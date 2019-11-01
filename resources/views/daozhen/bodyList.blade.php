@@ -14,7 +14,7 @@
         <ul id="leftlistid">
             @foreach($data as $v)
                 @if ($loop->first)
-                <li class="cur" id="{{ $v->id }}"><p id="{{ $v->id }}"><img width="30" height="30" src="{{ url('dz/img/') }}/31.png" />{{ $v->name }}<b>相关</b></p>
+                <li class="cur" id="{{ $v->id }}"><p id="{{ $v->id }}"><img id="img" width="30" height="30" src="{{ url('dz/img/') }}/31.png" />{{ $v->name }}<b>相关</b></p>
                 <!---->
                 <dl class="none"></dl></li>
                 @else
@@ -27,7 +27,7 @@
     </div>
     <div class="right" style="height: 428px; overflow: scroll;">
         @foreach($son as $k => $v)
-            <a href="{{ $k }}">{{ $v }}</a>
+            <a href="{{ route('daozhen.symptom',['symptom_name'=>$v,'gender'=>request()->gender,'symptom_id'=>$k ]) }}">{{ $v }}</a>
         @endforeach
     </div>
 </div>
@@ -42,20 +42,32 @@
 $(function () {
     $('#leftlistid').click(function (e) {
        // alert(e.target.id);
+        var li = $(e.target);
+        var id = e.target.id;
+        if(e.target.id == 'img'){
+            id = $(e.target).parent().attr('id');
+        }
+        $('#leftlistid li').each(function () {
+            $(this).attr('class','');
+        });
+        $(e.target).parent().attr('class','cur');
         $.ajax({
             url: '{{ route('api.bodyTab') }}',
             type: 'POST',
             dataType: 'json',
-            data:{id:e.target.id,'_token':'{{ csrf_token() }}'},
+            data:{id:id,'_token':'{{ csrf_token() }}'},
             beforeSend:function(){
                 loading();
             },
             success: function(res) {
                 stoploading();
+
+
                 var data = res.data;
+
                 $('.right').empty();
                 $.each(data, function(index, el) {
-                    $('.right').append('<a href='+data[index]+'>'+data[index]+'</a>');
+                    $('.right').append('<a href={{ url('daozhen/symptom') }}/'+data[index]+'>'+data[index]+'</a>');
                 });
             },
         })

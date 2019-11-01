@@ -103,9 +103,10 @@
                     success: function(res) {
                         stoploading();
                         var data = res.data;
-                        console.log(data);
                         $.each(data, function(index, el) {
-                            var keyword_a = $("<a href='/intelligenceserver/view/moreProbality?symptom_word="+el+"'>" + el + "</a>");
+                        console.log(el);
+                        console.log(index);
+                            var keyword_a = $("<a href='{{ url('daozhen/symptom') }}?symptom_name="+el+"&symptom_id="+index+"'>" + el + "</a>");
                             $(".con").eq(2).append(keyword_a);
                         });
 

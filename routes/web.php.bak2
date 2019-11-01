@@ -275,7 +275,10 @@ Route::get('daozhen/body','Dz\DzController@body')->name('daozhen.body');
 Route::get('daozhen/body/list','Dz\DzController@bodyList')->name('daozhen.body.list');
 Route::get('daozhen/symptom','Dz\DzController@symptom')->name('daozhen.symptom');
 Route::post('api/symptom/search','Dz\ApiDzController@symptomSearch')->name('api.symptomSearch');
+Route::post('api/symptom/search2','Dz\ApiDzController@symptomSearch2')->name('api.symptomSearch2');
 Route::post('api/symptom/fenxi','Dz\ApiDzController@fenxi')->name('api.fenxi');
+Route::get('daozhen/diseaseRetrieve','Dz\DzController@diseaseRetrieve')->name('daozhen.diseaseRetrieve');
+Route::post('api/diseaseRetrieve','Dz\ApiDzController@diseaseRetrieve')->name('api.diseaseRetrieve');
 
 
 

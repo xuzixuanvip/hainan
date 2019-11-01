@@ -14,7 +14,7 @@ class Kfsymptom extends Model
 
     public function symptom_disease()
     {
-        return $this->belongsToMany('App\Models\Kfdisease','symptom_diseases','symptom_id','diseases_id');
+        return $this->belongsToMany('App\Models\Kfdisease','symptom_diseases','symptom_id','diseases_id')->withPivot('probability');
     }
 
     public function body_symptom()

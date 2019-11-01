@@ -35,5 +35,11 @@ class DzController extends Controller
         return view('daozhen.symptom');
     }
 
+    public  function diseaseRetrieve(Request $request)
+    {
+
+        return view('daozhen.diseaseRetrieve');
+    }
+
 
 }

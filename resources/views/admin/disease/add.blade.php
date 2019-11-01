@@ -76,6 +76,12 @@
                                     <textarea type="text" class="form-control" name="treatment"  value="{{ old('treatment') }}"></textarea>
                                 </div>
                             </div>
+                            <div class="form-group col-md-6">
+                                <label class="col-md-3 control-label">疾病概述</label>
+                                <div class="col-md-9">
+                                    <textarea type="text" class="form-control" name="introduction"  value="{{ old('introduction') }}"></textarea>
+                                </div>
+                            </div>
 
                             <div class="form-group text-center col-md-12">
 
