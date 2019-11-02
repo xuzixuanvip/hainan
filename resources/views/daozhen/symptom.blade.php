@@ -133,7 +133,7 @@
 <section id="search_tag" class="tyafter">
     <div class="serachBtn"></div>
     <!-- data-text="咳嗽"必须加上 -->
-    <a class="orange" data-text="{{ request()->symptom_name }}" id="{{request()->symptom_id}}" href="{{ route('daozhen.index') }}">{{  request()->symptom_name  }}<span onClick="window.location.href='{{ route('daozhen.index') }}'">×</span></a>
+    <a class="orange" data-text="{{ request()->symptom_name }}" href="{{ route('daozhen.index') }}">{{  request()->symptom_name  }}<span onClick="window.location.href='{{ route('daozhen.index') }}'">×</span></a>
     <!--  <a class="green">咳嗽1<span>×</span></a> -->
 </section>
 <section class="index_zzzc">
@@ -182,11 +182,12 @@
         function request(){
             var a_innertext = [];
             $("#search_tag").find('a').each(function(index, el) {
-                var item_text = $(el).attr("id");
+                var item_text = $(el).attr("data-text");
                 a_innertext.push(item_text);
             });
             a_innertext = a_innertext.join(";");
             console.log(a_innertext);
+            // return;
             // localStorage.setItem("symptom_word",a_innertext);
             // 初始化  关键字获取，每页分20个
             $.ajax({
@@ -196,7 +197,7 @@
                 beforeSend: function() {
                     loading();
                 },
-                data:{_token:'{{csrf_token()}}',symptom_id:a_innertext,gender:localStorage.getItem("gender"),age:localStorage.getItem("age")},
+                data:{_token:'{{csrf_token()}}',symptom_word:a_innertext,gender:localStorage.getItem("gender"),age:localStorage.getItem("age")},
                 success: function(res) {
                     stoploading();
                     if(res.data.symptoms == undefined || res.data.symptoms == null || res.data.symptoms.length==0){
@@ -266,7 +267,6 @@
     function fenxi() {
         // 获取参数
         var a_innertext = [];
-        var symptom_id = "{{ request()->symptom_id ?? '' }}";
         $("#search_tag").find('a').each(function(index, el) {
             var item_text = $(el).attr("data-text");
             a_innertext.push(item_text);
@@ -277,7 +277,7 @@
             url: '{{ route('api.fenxi') }}',
             type: 'POST',
             dataType: 'json',
-            data:{'_token':'{{ csrf_token() }}',symptom_id:symptom_id,symptom_word:a_innertext,gender:localStorage.getItem("gender"),age:localStorage.getItem("age")},
+            data:{'_token':'{{ csrf_token() }}',symptom_word:a_innertext,gender:localStorage.getItem("gender"),age:localStorage.getItem("age")},
             beforeSend: function() {
                 loading();
             },
@@ -324,14 +324,15 @@
     function sw2_show(res){
         $(".swiper2").find('.swiper-wrapper').html("");
         updateData(res);
-        var diseases = res.data.diseases;
+        var diseases = res.data.disease;
+        console.log(diseases);
         if(diseases == undefined || diseases == null || diseases.length==0){
             var notdata=$("<div style='text-align:center;width:100%'>您选择的症状无分析结果，请<a href='{{ route('daozhen.index') }}'>重新选择</a></div>");
             $(".swiper2").find('.swiper-wrapper').append(notdata);
 
         }else{
             for (var i = 0; i < diseases.length; i++) {
-                var symptoms_text = diseases[i].symptoms_text;
+                var symptoms_text = diseases[i].symptom;
 
                 var age = localStorage.getItem("age");
                 if(age == null){
@@ -341,7 +342,7 @@
                 if(gender == null){
                     gender = "";
                 }
-                var html = $("<div class='swiper-slide swiper-slide2'><a href='{{ url('daozhen/diseaseRetrieve') }}?diseases_id="+diseases[i].id+"&gender="+gender+"&diseasename=" + diseases[i].name + "' class='block'><span class='page_number'>0" + (i + 1) + "</span><h2>" + diseases[i].name + "</h2><p>患病概率</span><b>" + diseases[i].pro + "%</b></p><p>常见症状：" + symptoms_text + "</p><p><button>查看详情</button></p></a></div>");
+                var html = $("<div class='swiper-slide swiper-slide2'><a href='{{ url('daozhen/diseaseRetrieve') }}?age="+age+"&gender="+gender+"&diseasename=" + diseases[i].name + "' class='block'><span class='page_number'>0" + (i + 1) + "</span><h2>" + diseases[i].name + "</h2><p>患病概率</span><b>" + diseases[i].pro + "%</b></p><p>常见症状：" + symptoms_text + "</p><p><button>查看详情</button></p></a></div>");
                 $(".swiper2").find('.swiper-wrapper').append(html);
             }
         }

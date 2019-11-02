@@ -35,7 +35,7 @@
         <h3><span></span>疾病概述</h3>
         <p></p>
     </div>
-    <dl class="symptoms">
+    <dl class="symptoms cur">
         <dt>
             <h3 class="bg1">伴随症状</h3>
         </dt>
@@ -43,21 +43,21 @@
 
         </dd>
     </dl>
-    <dl class="pathogen">
+    <dl class="pathogen cur">
         <dt>
             <h3 class="bg3">疾病原因</h3>
         </dt>
         <dd>
         </dd>
     </dl>
-    <dl class="lcbx">
+    <dl class="lcbx cur">
         <dt>
             <h3 class="bg4">临床表现</h3>
         </dt>
         <dd>
         </dd>
     </dl>
-    <dl class="therapy">
+    <dl class="therapy cur">
         <dt>
             <h3 class="bg5">疾病治疗</h3>
         </dt>
@@ -87,7 +87,7 @@
             beforeSend:function(){
                 loading();
             },
-            data:{_token:'{{ csrf_token() }}',diseases_id:'{{request()->diseases_id ?? 0}}',gender:getgender,age:getage},
+            data:{_token:'{{ csrf_token() }}',diseasename:'{{request()->diseasename ?? 0}}',gender:getgender,age:getage},
             success: function(res) {
                 stoploading();
                 var data=res.data;

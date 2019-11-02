@@ -27,11 +27,11 @@ class ApiDzController extends Controller
 
     public function search(Request $request)
     {
-        $symptom = \DB::table('kf_symptom')->where('name','like','%'. $request->keyword.'%')->get()->pluck('name');
-        $diseases = \DB::table('kf_diseases')->where('name','like','%'. $request->keyword.'%')->get()->pluck('name');
+
+        $symptom = \DB::table('kf_symptom')->where('name','like','%'. $request->keyword.'%')->take(5)->get()->pluck('name','id');
+        $diseases = \DB::table('kf_diseases')->where('name','like','%'. $request->keyword.'%')->take(5)->get()->pluck('name','id');
         $data['symptom'] = $symptom;
         $data['diseases'] = $diseases;
-
         return $this->success($data);
 
     }
@@ -53,44 +53,89 @@ class ApiDzController extends Controller
         return $this->success($son);
     }
 
-    public function symptomSearch(Request $request,Kfdisease $disease)
+    public function symptomSearch(Request $request,Kfdisease $disease,Kfsymptom $symptom)
     {
-        $symptom = \DB::table('symptom_diseases')
-                    ->where('symptom_id',$request->symptom_id)
-                    ->orderBy('probability','desc')->offset(0)
+        $data = [];
+        $symp_name = explode(';',$request->symptom_word);
+        $data_id = $symptom->whereIn('name',$symp_name)->get()->pluck('id');
+
+        $disease_id = \DB::table('symptom_diseases')
+                    ->where('symptom_id',$data_id)
+                    ->orderBy('probability','desc')
+                    ->offset(0)
                     ->limit(5)
                     ->get()
                     ->pluck('diseases_id');
-        $data['symptoms'] = [];
-        foreach($disease->find($symptom) as $v){
-            foreach($v->symptom_disease->pluck('name') as $k =>$vv){
-                if(!in_array($vv,$data['symptoms'])){
-                    $data['symptoms'][] = $vv;
-                }
+        $symptom_diseases = \DB::table('symptom_diseases')
+                                ->whereIn('diseases_id',$disease_id)
+                                ->orderBy('probability','desc')
+                                ->offset(0)
+                                ->limit(20)
+                                ->get()
+                                ->pluck('symptom_id');
+        $data_id = json_decode($data_id,true);
+        foreach($symptom_diseases as $k => $v){
+            if(in_array($v,$data_id)){
+                unset($symptom_diseases[$k]);
             }
         }
+        $data['symptoms'] = $symptom->find($symptom_diseases)->pluck('name');
+        $disease_msg = $disease->find($disease_id);
+        $data['disease'] = $disease_msg;
+//
         return $this->success($data);
     }
 
-    public function fenxi(Request $request,Kfsymptom $symptom)
+    public function fenxi(Request $request,Kfsymptom $symptom,Kfdisease $disease)
     {
-        $symptom_data = $symptom->select('id','name')->find($request->symptom_id)->symptom_disease->all();
         $data = [];
-        foreach ($symptom_data as $k=> $v) {
-            $data['symptoms'] = $v->symptom_disease->pluck('name');
-            $data['diseases'] = $symptom_data;
-            $data['diseases'][$k]['pro'] = $v->pivot->probability;
-            $data['diseases'][$k]['symptoms_text'] = $v->symptom_disease->pluck('name');
+        if(substr_count($request->symptom_word,';') != 0) {
+            $symp_name = explode(';',$request->symptom_word);
+        } else {
+            $symp_name = array($request->symptom_word);
         }
-        return $this->success($data);
+        $data_id = $symptom->whereIn('name',$symp_name)->get()->pluck('id');
+        $symptom_ids = $symptom->offset(0)->limit(5)->find($data_id)->pluck('id');
 
+//        $symptom_data = $symptom->select('id','name')->find($request->symptom_id)->symptom_disease->all();
+        $symptom_data = \DB::table('symptom_diseases')
+                    ->whereIn('symptom_id',$symptom_ids)
+                    ->orderBy('probability','desc')
+                    ->offset(0)
+                    ->limit(5)
+                    ->get()
+                    ->pluck('diseases_id','probability');
+        $symptom_data = $this->a_array_unique($symptom_data);
+        $disease_msg = $disease->find($symptom_data);
+        $data['disease'] = $disease_msg;
+        $data['symptoms'] = [];
+        foreach($disease_msg as $k=>$v){
+            $data['disease'][$k]['symptom'] = $v->symptom_disease->pluck('name');
+//            foreach($v->symptom_disease as $v){
+//                $data['disease'][$k]['pro'] = $v->pivot->pluck('probability');
+//            }
+
+            $data['symptoms'] =  $v->symptom_disease->pluck('name');
+            foreach ($v->symptom_disease as $vv){
+                $data['disease'][$k]['pro'] = $vv->pivot->probability;
+            }
+        }
+
+//        $disease_msg =  $disease->whereIn('id',$symptom_data)->get();
+////        $data = [];
+////        $data['diseases'] = $disease_msg;
+////        foreach ($disease_msg as $k => $v) {
+////            $data['diseases'][$k] = $v->symptom_diseases;
+//        }
+        return $this->success($data);
     }
 
 
     public function diseaseRetrieve(Request $request,Kfdisease $disease)
     {
         $data = [];
-        $data['xgzds'] = $disease->find($request->diseases_id);
+        $id = \DB::table('kf_diseases')->where('name',$request->diseasename)->first()->id;
+        $data['xgzds'] = $disease->find($id);
         $data['jzkses'] =   $data['xgzds']->department->pluck('name');
         $data['symptoms'] =  $data['xgzds']->symptom_disease->pluck('name');
         return $this->success($data);
@@ -114,5 +159,18 @@ class ApiDzController extends Controller
     public function success($data,$msg='成功',$code='200')
     {
         return response()->json(['code'=>$code,'msg'=>$msg,'data'=>$data])->setEncodingOptions(JSON_UNESCAPED_UNICODE);
+    }
+
+
+    function a_array_unique($array)//写的比较好
+    {
+        $out = array();
+        foreach ($array as $key=>$value) {
+            if (!in_array($value, $out))
+            {
+                $out[$key] = $value;
+            }
+        }
+        return $out;
     }
 }

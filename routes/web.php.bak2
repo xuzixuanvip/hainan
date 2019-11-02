@@ -279,6 +279,7 @@ Route::post('api/symptom/search2','Dz\ApiDzController@symptomSearch2')->name('ap
 Route::post('api/symptom/fenxi','Dz\ApiDzController@fenxi')->name('api.fenxi');
 Route::get('daozhen/diseaseRetrieve','Dz\DzController@diseaseRetrieve')->name('daozhen.diseaseRetrieve');
 Route::post('api/diseaseRetrieve','Dz\ApiDzController@diseaseRetrieve')->name('api.diseaseRetrieve');
+Route::get('daozhen/search','Dz\DzController@search')->name('daozhen.search');
 
 
 

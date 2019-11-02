@@ -42,4 +42,11 @@ class DzController extends Controller
     }
 
 
+    public function search(Request $request)
+    {
+        if(!$request->symptom_name){
+            return redirect(route('daozhen.index'));
+        }
+        return view('daozhen.search');
+    }
 }
