@@ -12,6 +12,6 @@ class Kftags extends Model
     protected $guarded = [];
     public function tags()
     {
-        return $this->belongsToMany('App\Models\kftags','tags_symptom','tags_id','symptom_id');
+        return $this->belongsToMany('App\Models\Kfsymptom','tags_symptom','tag_id','symptom_id');
     }
 }

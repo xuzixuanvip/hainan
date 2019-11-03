@@ -135,13 +135,13 @@
                 beforeSend:function(){
                     loading();
                 },
-                data:{'_token':'{{ csrf_token() }}'},
+                data:{id:li_id,'_token':'{{ csrf_token() }}'},
                 success: function(res) {
                     stoploading();
-                    $(".con").eq(index2).html("");
+                    $(".con").eq(index2).empty();
                     var data = res.data;
                     $.each(data, function(index, el) {
-                        var keyword_a = $("<a href='/intelligenceserver/view/moreProbality?symptom_word="+el+"'>" + el + "</a>");
+                        var keyword_a = $("<a href='{{ url('daozhen/symptom') }}?symptom_name="+el+"&symptom_id="+index+"'>" + el + "</a>");
                         $(".con").eq(index2).append(keyword_a);
                     });
 
@@ -171,11 +171,11 @@
                     stoploading();
                     $(".search_result").show();
                     var diseases = res.data.diseases;
-                    var symptoms = res.data.symptoms;
+                    var symptoms = res.data.symptom;
                     if(symptoms != undefined && symptoms != null && symptoms != ""){
 
                         $.each(symptoms, function(index, el) {
-                            var symptoms_html = $("<a href='/intelligenceserver/view/moreProbality?symptom_word="+el+"'>" + el + "</a>");
+                            var symptoms_html = $("<a href='{{ url('daozhen/symptom') }}?symptom_name="+el+"&symptom_id="+ index +"'>" + el + "</a>");
                             $(".search_result").find(".one_a").append(symptoms_html)
                         });
 
@@ -186,7 +186,7 @@
                     }
                     if(diseases != undefined && diseases != null && diseases != ""){
                         $.each(diseases, function(index, el) {
-                            var diseases_html = $("<a href='/intelligenceserver/view/diseaseWikiByNameRetrieve?diseasename="+el+"'>" + el + "</a>");
+                            var diseases_html = $("<a href='{{ url('daozhen/diseaseRetrieve') }}?diseasename="+el+"'>" + el + "</a>");
                             $(".search_result").find(".two_a").append(diseases_html)
                         });
 

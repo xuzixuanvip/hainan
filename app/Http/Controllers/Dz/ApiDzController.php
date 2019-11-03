@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dz;
 
 use App\Models\kfBody;
 use App\Models\Kfdisease;
+use App\Models\Kftags;
 use App\Models\Kfsymptom;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -13,16 +14,18 @@ class ApiDzController extends Controller
 {
     public function tags(Request $request)
     {
+
         $tags = \DB::table('kf_tags')->get();
         return $this->success($tags);
     }
 
 
-    public function symptom(Request $request)
+    public function symptom(Request $request,Kftags $tag)
     {
-        $symptom = \DB::table('kf_symptom')->get()->pluck('name','id');
+        $tag_msg = $tag->find($request->id)->tags->pluck('name','id');
+//        $symptom = \DB::table('kf_symptom')->get()->pluck('name','id');
 
-        return $this->success($symptom);
+        return $this->success($tag_msg);
     }
 
     public function search(Request $request)
