@@ -24,7 +24,7 @@
                     </div>
                 @endif
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-9">
                         <form class="form-horizontal" role="form" action="{{url('zadmin/symptom/'.$data->id)}}" method="post" enctype="multipart/form-data">{{ method_field('PUT') }}
                             <div class="form-group col-md-6">
                                 <label class="col-md-3 control-label">症状名称</label>
