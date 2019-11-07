@@ -17,8 +17,12 @@
     </div>
 </header>
  -->
+<div style="border:1px solid #1299da;height:50px;border-radius: 10px;margin:1px 10px -10px 10px">
+    <b style="color: red;margin-left: 20px;">公告:</b> <b >{{ empty($content) ? '' : $content->content }}</b>
+</div>
 <section id="search" class="index_search">
-    <input type="text" placeholder="请输入症状或疾病如：发热" id="myInput">
+
+    <input type="text" placeholder="请输入症状或疾病关键字如：发热、头疼、感冒等。" id="myInput">
     <button class="confirm" disabled="disabled"></button>
     <button class="cancel"></button>
 </section>
@@ -45,6 +49,8 @@
                 </div>
                 <div class="con none">
                 </div>
+            </div>
+        </ul>
     </section>
 </div>
 <div class="search_result">
@@ -89,7 +95,7 @@
             success: function(res) {
                 var data = res.data;
                 $.each(data, function(index, el) {
-                    var tab_li = $("<li data-id='" + el.id + "'><span><img src='" + el.photo + "'></span><span>" + el.name + "</span></li>");
+                    var tab_li = $("<li data-id='" + el.id + "'><span><img src='{{url('/')}}" + el.image + "'></span><span>" + el.name + "</span></li>");
                     $(".tab").prepend(tab_li);
                 });
                 $(".tab").find('li').eq(2).addClass('cur');

@@ -10,8 +10,8 @@ class DzController extends Controller
 {
     public function index()
     {
-
-        return view('daozhen.index');
+        $content = \DB::table('kf_content')->first();
+        return view('daozhen.index',compact('content'));
     }
 
     public function body()

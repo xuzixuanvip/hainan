@@ -28,7 +28,7 @@ Route::middleware('web')->namespace('Dc')->prefix('shop')->group(function(){
         Route::get('products/change-status','ProductController@changeStatus'); 
         Route::resource('products','ProductController'); 
         Route::resource('cates',   'ProductCateController');   
-        Route::resource('users',      'UserController');
+        Route::resource('users',      'AdminUserController');
         Route::resource('shopusers',  'DiancanShopUserController');
         
         Route::get('orders',     'OrderController@index');
@@ -68,9 +68,9 @@ Route::namespace('DcApi')->prefix('api')->group(function(
         Route::post('product/cate','ProductController@cate');
         Route::post('product/type','ProductController@type');
 
-        Route::post('user/info','UserController@info');
+        Route::post('user/info','AdminUserController@info');
 
-        Route::post('user/update','UserController@update');
+        Route::post('user/update','AdminUserController@update');
 
         Route::prefix('cart')->group(function(){
             Route::post('add',     'CartController@add');

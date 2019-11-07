@@ -17,6 +17,10 @@
         <div class="col-lg-12">
             <div class="card-box">
                 <div class="row">
+                    <div class="col-sm-1" style="float: right">
+                        <a href="{{ route('tags.create') }}" class="btn btn-primary btn-md waves-effect waves-light m-b-30"
+                        ><i class="md md-add"></i>添加</a>
+                    </div>
                     <div class="col-sm-4">
                         <form role="form">
                             <div class="form-group contact-search col-sm-8 m-b-30">
@@ -57,6 +61,7 @@
                                 </td>
                                 <td>
                                     <a href="{{url('zadmin/tags/'.$v->id.'/edit')}}" ><i class="md md-edit"></i>编辑</a>
+                                    <a href="{{route('tags.image_edit',$v->id)}}" ><i class="md md-edit"></i>编辑图片</a>
                                 </td>
                             </tr>
 

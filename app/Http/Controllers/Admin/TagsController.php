@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Kftags;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Helpers\ImageUploadHandlers;
 
 class TagsController extends Controller
 {
@@ -35,7 +36,7 @@ class TagsController extends Controller
      */
     public function create()
     {
-
+        return view('admin.tags.create');
     }
 
     /**
@@ -46,7 +47,22 @@ class TagsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if(!$request->hasFile('img')) return back()->withErrors(['图片不能为空']);
+
+
+        $image =  app(ImageUploadHandlers::class)->save2($request->file('img'),'tags');
+
+        if($image['code'] == 200){
+            $request->offsetSet('image',$image['msg']);
+        }
+
+        $data = Kftags::create($request->except('_token'));
+
+        if($data) {
+            return redirect()->route('tags.index')->with(['success'=>'成功~']);
+        } else {
+            return back()->withErrors(['失败']);
+        }
     }
 
     /**
@@ -87,6 +103,7 @@ class TagsController extends Controller
      */
     public function update(Request $request, $id)
     {
+
         $tags_id = $id;
         $symptom_id  = $request->symptom_id;
         $arr = [];
@@ -119,4 +136,37 @@ class TagsController extends Controller
     {
         //
     }
+
+    public function image_update(Request $request,kftags $tag)
+    {
+        if($request->hasFile('img')){
+            $image =  app(ImageUploadHandlers::class)->save2($request->file('img'),'tags');
+            $request->offsetSet('image',$image['msg']);
+        }
+
+           $data =  $tag->where('id',$request->id)->update($request->except('_token'));
+
+        if($data){
+            return redirect()->route('tags.index')->with(['success'=>'成功~']);
+        } else {
+            return back()->withErrors(['失败']);
+        }
+
+
+    }
+
+
+
+    public function image_edit($id)
+    {
+        $data = Kftags::find($id);
+        return view('admin.tags.image_edit',compact('data'));
+    }
+
+
+
+
+
+
 }
+

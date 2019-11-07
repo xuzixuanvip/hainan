@@ -10,6 +10,9 @@ class Kftags extends Model
     protected $primaryKey = 'id';
     public $timestamps = false;
     protected $guarded = [];
+
+    protected $fillable = ['name', 'status','image'];
+
     public function tags()
     {
         return $this->belongsToMany('App\Models\Kfsymptom','tags_symptom','tag_id','symptom_id');

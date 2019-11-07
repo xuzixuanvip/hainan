@@ -14,8 +14,8 @@ class ApiDzController extends Controller
 {
     public function tags(Request $request)
     {
-
-        $tags = \DB::table('kf_tags')->get();
+        $tags = \DB::table('kf_tags')->where('status',1)->get();
+//
         return $this->success($tags);
     }
 
