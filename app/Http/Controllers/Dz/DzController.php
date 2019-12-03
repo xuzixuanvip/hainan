@@ -10,7 +10,7 @@ class DzController extends Controller
 {
     public function index()
     {
-        $content = \DB::table('kf_content')->first();
+        $content = \DB::table('kf_content')->get()->all();
         return view('daozhen.index',compact('content'));
     }
 

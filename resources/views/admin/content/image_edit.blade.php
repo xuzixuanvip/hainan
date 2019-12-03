@@ -4,11 +4,10 @@
     <!-- Page-Title -->
     <div class="row">
         <div class="col-sm-12">
-            <h4 class="page-title">症状管理</h4>
+            <h4 class="page-title">首页图片管理</h4>
             <ol class="breadcrumb">
                 <li><a href="{{url('zadmin/')}}">系统</a></li>
-                <li><a href="{{url('zadmin/goods')}}">症状列表</a></li>
-                <li class="active">新建症状</li>
+                <li class="active">修改首页图片</li>
             </ol>
         </div>
     </div>
@@ -16,7 +15,7 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card-box">
-                <h2 class="m-t-0 header-title">新建症状</h2>
+                <h2 class="m-t-0 header-title">修改条件症状</h2>
                 <hr/>
                 @if(session('rs'))
                     <div class="alert alert-{{session('rs')['status']}}">
@@ -25,46 +24,24 @@
                 @endif
                 <div class="row">
                     <div class="col-md-12">
-                        <form class="form-horizontal" role="form" action="{{url('zadmin/symptom/')}}" method="post" enctype="multipart/form-data">
-                            <div class="form-group col-md-6">
-                                <label class="col-md-3 control-label">症状名称</label>
-                                <div class="col-md-9">
-                                    <input type="text" class="form-control" name="name" required="" value="{{old('name')}}">
-                                </div>
-                            </div>
+                        <form class="form-horizontal" role="form" action="{{route('content.image.update',$image->id)}}" method="post" enctype="multipart/form-data">
 
-                            <div class="form-group col-md-6">
-                                <label class="col-md-3 control-label">性别</label>
-                                <div class="col-md-9">
-                                    <select class="form-control" name="sex">
-                                        <option value="1" >男</option>
-                                        <option value="2" >女</option>
-                                        <option value="0" >不限</option>
-                                    </select>
-                                </div>
-                            </div>
 
-                            <div class="form-group col-md-3" style="margin-left: 7%;width: 80%;">
-                                <b>请选择该症状适用人群: </b>
-                            @foreach($tag as $k => $v)
-                                    <label>
-                                        <input type="checkbox" style="margin:10px" name="tags[]" value="{{ $k }}" > {{ $v }}
-                                    </label>
-                                @endforeach
-                            </div>
-                            <div class="form-group text-center col-md-12">
-
-                                <button type="submit" class="btn btn-info waves-effect waves-light">保存</button>
+                            <div class="form-group col-md-1" style="margin-left:30px">
+                                <label >
+                                    <img src="{{url('/').$image->content}}" alt="" style="width:150px">
+                                    <input type="file" name="img" >
+                                </label>
                             </div>
                             {{csrf_field()}}
+                            <div class="form-group text-center col-md-12">
+                                <button type="submit" class="btn btn-info waves-effect waves-light">保存</button>
+                            </div>
                         </form>
+
                     </div>
 
                 </div>
-
-
-
-
             </div>
 
         </div> <!-- end col -->

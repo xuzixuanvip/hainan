@@ -43,7 +43,7 @@ class ImageUploadHandlers
             return['code'=>400,'msg'=>'上传文件不合法'];
         }
 
-        $dir_name = "uploads/images/$cate/" . date("Ym/d");
+        $dir_name = "uploads/images/$cate";
 
         $upload_path = public_path() . '/' . $dir_name;
 
@@ -52,7 +52,7 @@ class ImageUploadHandlers
         }
         $extentsion = strtolower($file->getClientOriginalExtension());
 
-        $filename = $cate . '_' . time() . '_' . str_random(10) . '.' . $extentsion;
+        $filename = $cate . '_' . date('Y-m-d',time()) . '_' . str_random(10) . '.' . $extentsion;
 
         if (!in_array($extentsion, $this->allowed_ext)) {
             return ['code' => 400, 'msg' => '上传文件不合法'];

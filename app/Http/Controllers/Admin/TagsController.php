@@ -109,12 +109,12 @@ class TagsController extends Controller
         $arr = [];
         $member = [];
         foreach($symptom_id as $k=>$v){
-            $arr['tags_id'] = $tags_id;
+            $arr['tag_id'] = $tags_id;
             $arr['symptom_id'] = $v;
             $member[] = $arr;
         }
-        $delete = DB::table('tags_symptom')->where('tags_id',$id)->delete();
-        $data = DB::table('tags_symptom')->insert($member);
+        $delete = DB::table('kf_tag_symptom')->where('tag_id',$id)->delete();
+        $data = DB::table('kf_tag_symptom')->insert($member);
         $rs['status'] = 'danger';
         $rs['msg'] = '操作失败';
         if ($data){
@@ -144,7 +144,7 @@ class TagsController extends Controller
             $request->offsetSet('image',$image['msg']);
         }
 
-           $data =  $tag->where('id',$request->id)->update($request->except('_token'));
+           $data =  $tag->where('id',$request->id)->update($request->except('_token','img'));
 
         if($data){
             return redirect()->route('tags.index')->with(['success'=>'成功~']);

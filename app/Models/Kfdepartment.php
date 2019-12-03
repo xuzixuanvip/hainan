@@ -18,7 +18,7 @@ class Kfdepartment extends Model
 
     public function diseases()
     {
-        return $this->belongsToMany('App\Models\kfdiseases','diseases_department','department_id','diseases_id');
+        return $this->belongsToMany('App\Models\kfdiseases','kf_diseases_department','department_id','diseases_id');
     }
 
 

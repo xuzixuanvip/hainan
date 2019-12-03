@@ -55,7 +55,7 @@
 
                             </th>
                             <th>症状名称</th>
-                            <th>症状性别</th>
+                            <th>症状类别</th>
 
 
 
@@ -77,13 +77,9 @@
                                     {{$v->name}}
                                 </td>
                                 <td>
-                                    @if($v->sex == 0)
-                                        不限
-                                    @elseif($v->sex == 1)
-                                        男
-                                    @else
-                                        女
-                                    @endif
+                                    @foreach($v->tags as $vv)
+                                        <span style="border: 1px solid;border-radius: 10px;padding: 3px;">{{ $vv->name }}</span>
+                                    @endforeach
                                 </td>
                                 <td>
                                     <a href="{{url('zadmin/symptom/'.$v->id.'/edit')}}" ><i class="md md-edit"></i>编辑</a>

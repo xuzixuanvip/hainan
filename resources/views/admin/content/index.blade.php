@@ -1,34 +1,6 @@
 @extends('admin.layouts.app')
 @section('content')
-    @if (Session::has('message'))
-        <div class="alert alert-info">
-            <button type="button" onclick="alert(132)" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            {{ Session::get('message') }}
-        </div>
-    @endif
 
-    @if (Session::has('success'))
-        <div class="alert alert-success">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            {{ Session::get('success') }}
-        </div>
-    @endif
-
-    @if (Session::has('danger'))
-        <div class="alert alert-danger">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            {{ Session::get('danger') }}
-        </div>
-    @endif
-    @if (count($errors) > 0)
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
     <!-- Page-Title -->
     <div class="row">
         <div class="col-sm-12">
@@ -44,30 +16,6 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card-box">
-{{--                <div class="row">--}}
-{{--                    <div class="col-sm-4">--}}
-{{--                        <form role="form" action="{{ route('body.index') }}" method="get">--}}
-{{--                            <div class="form-group contact-search col-sm-8 m-b-30">--}}
-{{--                                --}}{{--                                {{ csrf_field() }}--}}
-{{--                                <input type="text" id="name" class="form-control"  name="name" value="{{ request()->name ??  request()->name }}" placeholder="输入疾病名搜索">--}}
-
-{{--                            </div>--}}
-{{--                            <div class="col-sm-4">--}}
-{{--                                <button type="submit" class="btn btn-white"><i class="fa fa-search"></i></button>--}}
-{{--                            </div> <!-- form-group -->--}}
-{{--                        </form>--}}
-{{--                    </div>--}}
-
-{{--                    <div class="col-sm-7">--}}
-
-{{--                        <div class="col-sm-1" style="float: right">--}}
-{{--                            <a href="{{ route('body.create') }}" class="btn btn-primary btn-md waves-effect waves-light m-b-30"--}}
-{{--                            ><i class="md md-add"></i>添加</a>--}}
-{{--                        </div>--}}
-
-
-{{--                    </div>--}}
-{{--                </div>--}}
 
                 @if(session('rs'))
                     <div class="alert alert-{{session('rs')['status']}}">
@@ -79,10 +27,7 @@
                     <table class="table table-hover">
                         <thead>
                         <tr>
-                            {{--                            <th style="min-width: 35px;">--}}
-                            {{--                                <input id="checkAll" type="checkbox" value=""/>全选--}}
 
-                            {{--                            </th>--}}
                             <th>公告内容</th>
                             <th style="width: 200px;">操作</th>
                         </tr>
@@ -90,18 +35,31 @@
 
                         <tbody>
                         @if($content)
+                            @foreach($content as $k =>$v)
                             <tr>
-
+                                @if($k < 2)
                                 <td>
-                                   <p style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:500px" alt="{{ $content->content }}">{{ $content->content }}</p>
+                                   <p style="white-space: nowrap;width:500px" alt="">{!!   $v->content !!}</p>
                                 </td>
 
                                         <td>
-                                            <a href="{{ route('content.edit',$content->id) }}" ><i class="md md-edit"></i>编辑</a>
+                                            <a href="{{ route('content.edit',$v->id) }}" ><i class="md md-edit"></i>编辑</a>
 {{--                                            <a type="submit" href="javascript:;" onclick="return delete_body('{{ $vv->id }}')"  data-method="delete"--}}
 {{--                                               data-token=""><i class="md md-close"></i>删除</a>--}}
                                         </td>
-                                    </tr>
+                                @endif
+                                @if($k == 2)
+                                    <td>
+                                        <img src="{{url('/').$v->content}} " style="width:50px" alt="">
+                                    </td>
+
+                                    <td>
+                                        <a href="{{ route('content.image.edit',['id'=>$v->id,'content'=>'img'] )}}" ><i class="md md-edit"></i>编辑</a>
+
+                                    </td>
+                                @endif
+                            </tr>
+                            @endforeach
                          @endif
 
 

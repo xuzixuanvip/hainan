@@ -15,13 +15,13 @@ class Kfdisease extends Model
 
     public function symptom_disease()
     {
-        return $this->belongsToMany('App\Models\Kfsymptom','symptom_diseases','diseases_id','symptom_id')->withPivot('probability');
+        return $this->belongsToMany('App\Models\Kfsymptom','kf_symptom_diseases','diseases_id','symptom_id')->withPivot('probability');
     }
 
 
     public function department()
     {
-        return $this->belongsToMany('App\Models\kfdepartment','diseases_department','diseases_id','department_id');
+        return $this->belongsToMany('App\Models\kfdepartment','kf_diseases_department','diseases_id','department_id');
     }
 
 }

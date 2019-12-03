@@ -54,7 +54,7 @@ class kfBody extends Model
         foreach ($data  as $v) {
             $son_ids[] = $v->id;
         }
-        \DB::table('body_symptom')->whereIn('body_id',$son_ids)->delete();
+        \DB::table('kf_body_symptom')->whereIn('body_id',$son_ids)->delete();
     }
 
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Kfdepartment;
 use App\Models\Kfdisease;
 use App\Models\Kfsymptom;
+use App\Models\Kftags;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -52,7 +53,7 @@ class DiseaseController extends Controller
         $rs['msg'] = '操作失败';
         $request = $request->except($request->_token);
         $flag = Kfdisease::create($request);
-        \DB::table('diseases_department')->insert(['diseases_id'=>$flag->id,'department_id'=>$request['department_id']]);
+        \DB::table('kf_diseases_dwebepartment')->insert(['diseases_id'=>$flag->id,'department_id'=>$request['department_id']]);
         if ($flag){
             $rs['status'] = 'success';
             $rs['msg'] = '操作成功';
@@ -83,7 +84,8 @@ class DiseaseController extends Controller
     {
         $data = Kfdisease::find($id);
         $department =  $department->get();
-        $department_id =  \DB::table('diseases_department')->where('diseases_id',$id)->get()->pluck('department_id')->all();
+        $department_id =  \DB::table('kf_diseases_department')->where('diseases_id',$id)->get()->pluck('department_id')->all();
+        $department_id = empty($department_id)  ? 0 : $department_id;
         return view('admin.disease.edit',compact('data','department','department_id'));
     }
 
@@ -98,7 +100,7 @@ class DiseaseController extends Controller
     {
         $data = $request->except('_token','_method','department_id');
         $flag = Kfdisease::where('id',$id)->update($data);
-        $flag2= \DB::table('diseases_department')->where('diseases_id',$id)->update(['department_id'=>$request->department_id]);
+        $flag2= \DB::table('kf_diseases_department')->where('diseases_id',$id)->update(['department_id'=>$request->department_id]);
         if ($flag || $flag2){
             return redirect('zadmin/disease');
         }
@@ -114,7 +116,7 @@ class DiseaseController extends Controller
     public function destroy($id)
     {
          Kfdisease::find($id)->symptom_disease()->detach();
-        \DB::table('diseases_department')->where('diseases_id',$id)->delete();
+        \DB::table('kf_diseases_department')->where('diseases_id',$id)->delete();
         $flag = Kfdisease::destroy($id);
         if ($flag){
             return redirect('zadmin/disease');
@@ -139,14 +141,16 @@ class DiseaseController extends Controller
 
         $result = Kfsymptom::all();
 
-        $proba = DB::table('symptom_diseases')->where('diseases_id',$id)->get();
+        $proba = DB::table('kf_symptom_diseases')->where('diseases_id',$id)->get();
         $rs = $data->symptom_disease()->get();
         $rsrs = [];
         foreach ($rs as $k=>$v){
             $rsrs[] = $v->id;
 //            $rsrs[]['pro'] = $proba$v->id;
         }
-        return view('admin.disease.symptom',compact('data','result','rsrs','proba'));
+        $tag = Kftags::select('id','name')->get();
+//        dd($rs);
+        return view('admin.disease.symptom',compact('data','result','rsrs','proba','rs','tag'));
     }
 
     public function insertdata(Request $request,$id)
@@ -161,8 +165,8 @@ class DiseaseController extends Controller
             $arr['probability'] = $request->input('probability'.$v);
             $member[] = $arr;
         }
-        $delete = DB::table('symptom_diseases')->where('diseases_id',$id)->delete();
-        $data = DB::table('symptom_diseases')->insert($member);
+        $delete = DB::table('kf_symptom_diseases')->where('diseases_id',$id)->delete();
+        $data = DB::table('kf_symptom_diseases')->insert($member);
         $rs['status'] = 'danger';
         $rs['msg'] = '操作失败';
         if ($data){
@@ -173,4 +177,42 @@ class DiseaseController extends Controller
         $rs['mag'] = $flag['msg'];
         return back()->withInput()->with('rs',$rs);
     }
+
+    public function search(Request $request,Kfdisease $disease)
+    {
+        $msg = $disease->where('name','like','%'.$request->name.'%')->first();
+        if($msg) {
+
+            $msg2 =  $msg->symptom_disease->pluck('id');
+
+            if($msg2) {
+
+                $data = ['code'=>200,'msg'=>'成功~','data'=>$msg2,'data2'=>$msg];
+
+            } else {
+
+                $data = ['code'=>400,'msg'=>'没有该疾病~'];
+
+            }
+
+        } else {
+
+            $data = ['code'=>400,'msg'=>'没有该疾病1~'];
+
+        }
+
+        return response()->json($data)->setEncodingOptions(JSON_UNESCAPED_UNICODE);
+    }
+
+    public function tag_search(Request $request)
+    {
+        $tag_id = DB::table('kf_tag_symptom')->where('tag_id',$request->id)->get()->pluck('symptom_id');
+        if($tag_id){
+            $data = ['code'=>200,'msg'=>'成功','data'=>$tag_id];
+        }else {
+            $data = ['code'=>400,'msg'=>'失败'];
+        }
+        return response()->json($data)->setEncodingOptions(JSON_UNESCAPED_UNICODE);
+    }
+
 }

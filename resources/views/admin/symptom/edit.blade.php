@@ -43,6 +43,14 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="form-group col-md-3" style="margin-left: 7%;width: 80%;">
+                                <b>请选择该症状适用人群: </b>
+                                @foreach($tag as $k => $v)
+                                    <label>
+                                        <input type="checkbox" {{ $data_tag_id->contains($k) ? 'checked' : '' }} style="margin:10px" name="tags[]" value="{{ $k }}" > {{ $v }}
+                                    </label>
+                                @endforeach
+                            </div>
                             {{csrf_field()}}
                             <div class="form-group text-center col-md-12">
                                 <button type="submit" class="btn btn-info waves-effect waves-light">保存</button>

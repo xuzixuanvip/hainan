@@ -151,6 +151,10 @@ Route::prefix('zadmin')->namespace('Admin')->group(function(){
         Route::get('content','ContentController@index')->name('content.index');
         Route::get('content/edit/{id}','ContentController@edit')->name('content.edit');
         Route::post('content/update/{id}','ContentController@update')->name('content.update');
+        Route::get('content/image_edit/{id}','ContentController@image_edit')->name('content.image.edit');
+        Route::post('content/image_update/{id}','ContentController@image_update')->name('content.image.update');
+        Route::post('disease/search/','DiseaseController@search')->name('disease.search');
+        Route::post('disease/tag_search/','DiseaseController@tag_search')->name('disease.tag_search');
 
 
 
@@ -284,8 +288,3 @@ Route::post('api/symptom/fenxi','Dz\ApiDzController@fenxi')->name('api.fenxi');
 Route::get('daozhen/diseaseRetrieve','Dz\DzController@diseaseRetrieve')->name('daozhen.diseaseRetrieve');
 Route::post('api/diseaseRetrieve','Dz\ApiDzController@diseaseRetrieve')->name('api.diseaseRetrieve');
 Route::get('daozhen/search','Dz\DzController@search')->name('daozhen.search');
-
-
-
-
-

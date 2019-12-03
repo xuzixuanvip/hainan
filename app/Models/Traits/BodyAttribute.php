@@ -28,7 +28,7 @@ trait BodyAttribute
 
     public function symptom()
     {
-        return $this->belongsToMany('App\Models\Kfsymptom','body_symptom','body_id','symptom_id');
+        return $this->belongsToMany('App\Models\Kfsymptom','kf_body_symptom','body_id','symptom_id');
     }
 
 }

@@ -2,12 +2,16 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <title>智能导诊</title>
+    <title>海南医学院第二附属医院 东湖分院 智能导诊</title>
     <link rel="stylesheet" type="text/css" href="{{url('/dz/css/reset2.css')}}">
 </head>
 
 
 <body>
+<style>
+    .index_rtt a{display: block; width: 100%; height: 5rem;background:url({{ empty($content[2]->content) ? 'http://cs.pro.atag.bsoft.com.cn/intelligenceserver/res/img/renti.png' : url('/').$content[2]->content  }}) no-repeat left center;
+        background-size:60px; padding-left: 6rem; color: #999999 ;box-sizing:border-box;}
+</style>
 <!--
 <header>
     <div class="left fl"><a href="">返回</a></div>
@@ -17,41 +21,49 @@
     </div>
 </header>
  -->
-<div style="border:1px solid #1299da;height:50px;border-radius: 10px;margin:1px 10px -10px 10px">
-    <b style="color: red;margin-left: 20px;">公告:</b> <b >{{ empty($content) ? '' : $content->content }}</b>
+<div style="border:1px solid green;height:50px;border-radius: 10px;margin:1px 10px -10px 10px">
+    <b style="margin-left:20px">{!!  empty($content) ? '' : $content[0]->content !!}</b>
 </div>
 <section id="search" class="index_search">
 
-    <input type="text" placeholder="请输入症状或疾病关键字如：发热、头疼、感冒等。" id="myInput">
+    <input type="text" style="border:1px solid green" placeholder="请输入症状或疾病关键字如：发热、头疼、感冒等。" id="myInput">
     <button class="confirm" disabled="disabled"></button>
     <button class="cancel"></button>
 </section>
-<div class="ageset"><button id="ageset">性别年龄设置</button></div>
+
+{{--<div class="ageset"><button id="ageset">性别年龄设置</button></div>--}}
 <section class="index_rtt">
+{{--    <img src="{{ url('/').$content[2]->content }}" alt="" style="width:20px">--}}
     <a href="{{ route('daozhen.body') }}">
         <h2>人体图查症状</h2>
         <p>按部位查看相应症状或疾病</p>
     </a>
-
+    <div style="border:1px solid green;height:50px;border-radius: 10px;margin:10px 10px -10px 10px">
+        <b style="margin-left:20px">{!! empty($content) ? '' : $content[1]->content !!}</b>
+    </div>
 </section>
 <div class="list">
+
     <section class="index_zzzc">
+
         <h2 class="tybefore">热查症状</h2>
         <ul class="tab">
 
-            <div class="con none">
-            </div>
-            <div class="con none">
-            </div>
-            <div class="con">
+{{--            <div class="con none">--}}
+{{--            </div>--}}
+{{--            <div class="con none">--}}
+{{--            </div>--}}
 
-                <div class="con none">
-                </div>
-                <div class="con none">
-                </div>
+                <div class="con">
+
+{{--                <div class="con none">--}}
+{{--                </div>--}}
+{{--                <div class="con none">--}}
+{{--                </div>--}}
             </div>
         </ul>
     </section>
+
 </div>
 <div class="search_result">
     <h3>你是不是要找一下症状？</h3>
@@ -113,7 +125,7 @@
                         console.log(el);
                         console.log(index);
                             var keyword_a = $("<a href='{{ url('daozhen/symptom') }}?symptom_name="+el+"&symptom_id="+index+"'>" + el + "</a>");
-                            $(".con").eq(2).append(keyword_a);
+                            $(".con").append(keyword_a);
                         });
 
                     },
@@ -144,11 +156,15 @@
                 data:{id:li_id,'_token':'{{ csrf_token() }}'},
                 success: function(res) {
                     stoploading();
-                    $(".con").eq(index2).empty();
+                    $(".con").empty();
                     var data = res.data;
+                    // var keyword_a = '';
                     $.each(data, function(index, el) {
+                    // console.log(index);
+                    // return;
                         var keyword_a = $("<a href='{{ url('daozhen/symptom') }}?symptom_name="+el+"&symptom_id="+index+"'>" + el + "</a>");
-                        $(".con").eq(index2).append(keyword_a);
+                        $(".con").append(keyword_a);
+
                     });
 
                 },

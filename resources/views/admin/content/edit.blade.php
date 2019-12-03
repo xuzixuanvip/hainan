@@ -1,35 +1,7 @@
 @extends('admin.layouts.app')
-
+@include('vendor.ueditor.assets')
 @section('content')
-    @if (Session::has('message'))
-        <div class="alert alert-info">
-            <button type="button" onclick="alert(132)" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            {{ Session::get('message') }}
-        </div>
-    @endif
 
-    @if (Session::has('success'))
-        <div class="alert alert-success">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            {{ Session::get('success') }}
-        </div>
-    @endif
-
-    @if (Session::has('danger'))
-        <div class="alert alert-danger">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            {{ Session::get('danger') }}
-        </div>
-    @endif
-    @if (count($errors) > 0)
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
 
     <!-- Page-Title -->
     <div class="row">
@@ -56,12 +28,28 @@
                 <div class="row">
                     <div class="col-md-12">
                         <form class="form-horizontal" role="form" action="{{ route('content.update',$content->id) }}" method="post" enctype="multipart/form-data">
-                            <div class="form-group col-md-6">
-                                <label class="col-md-3 control-label">公告内容</label>
-                                <div class="col-md-9">
-                                    <textarea name="content" id="" cols="150" rows="10">{{ $content->content }}</textarea>
-                                </div>
-                            </div>
+{{--                            <div class="form-group col-md-6">--}}
+{{--                                <label class="col-md-3 control-label">公告内容</label>--}}
+{{--                                <div class="col-md-9">--}}
+{{--                                    <textarea name="content" id="" cols="150" rows="10">{{ $content->content }}</textarea>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+
+
+
+
+                            <script type="text/javascript">
+                                var ue = UE.getEditor('container');
+                                ue.ready(function() {
+                                    ue.execCommand('serverparam', '_token', '{{ csrf_token() }}'); // 设置 CSRF token.
+                                });
+                            </script>
+                            <!-- 编辑器容器 -->
+                            <script id="container" name="content" type="text/plain">{!!  $content->content  !!}</script>
+{{--                            <input name="id" value="{{ $content->id }}" type="hidden">--}}
+
+
+
 
                             {{csrf_field()}}
                             <div class="form-group text-center col-md-12">

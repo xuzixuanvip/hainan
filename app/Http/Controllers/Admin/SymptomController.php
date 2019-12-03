@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 use App\Models\Kfsymptom;
+use App\Models\Kftags;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use phpDocumentor\Reflection\DocBlock\Tag;
 
 class SymptomController extends Controller
 {
@@ -21,7 +23,8 @@ class SymptomController extends Controller
             $query->where('name','like','%'.$request->keyword.'%');
         }
         $list = $query->paginate(10);
-
+//        dump($list[1]);
+//        dd($list[1]->tags->pluck('name'));
         return view('admin.symptom.index',compact('list','where'));
     }
 
@@ -30,9 +33,10 @@ class SymptomController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Kftags $tag)
     {
-        return view('admin.symptom.add');
+        $tag = $tag->get()->pluck('name','id');
+        return view('admin.symptom.add',compact('tag'));
     }
 
     /**
@@ -41,12 +45,13 @@ class SymptomController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request,Kfsymptom $kfsymptom)
     {
         $rs['status'] = 'danger';
         $rs['msg']    = '操作失败';
-        $data = $request->except('_token');
+        $data = $request->except('_token','tags');
         $flag = Kfsymptom::create($data);
+        $flag->tags()->attach($request->tags);//批量添加
         if($flag) {
             $rs['status'] = 'success';
             $rs['msg']    = '操作成功';
@@ -73,12 +78,12 @@ class SymptomController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id,Kftags $tag)
     {
-
         $data = Kfsymptom::find($id);
-
-        return view('admin.symptom.edit',compact('data'));
+        $data_tag_id = $data->tags->pluck('id','name');
+        $tag = $tag->get()->pluck('name','id');
+        return view('admin.symptom.edit',compact('data','tag','data_tag_id'));
     }
 
     /**
@@ -90,9 +95,18 @@ class SymptomController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data = $request->except('_token','_method');
+        $data = $request->except('_token','_method','tags');
 
         $rs   = Kfsymptom::where('id',$id)->update($data);
+        if(!empty($request->tags)){
+            $symptom = new Kfsymptom;
+            $symptom = $symptom->find($id);
+             $res2 =$symptom->tags()->sync($request->tags);//批量添加
+            if($res2) {
+                return redirect('zadmin/symptom');
+            }
+        }
+
         if($rs) {
             return redirect('zadmin/symptom');
         }
@@ -107,8 +121,8 @@ class SymptomController extends Controller
      */
     public function destroy($id)
     {
-        \DB::table('body_symptom')->where('symptom_id',$id)->delete();
-        \DB::table('symptom_diseases')->where('symptom_id',$id)->delete();
+        \DB::table('kf_body_symptom')->where('symptom_id',$id)->delete();
+        \DB::table('kf_symptom_diseases')->where('symptom_id',$id)->delete();
         $rs = Kfsymptom::destroy($id);
         if ($rs) {
             return redirect('zadmin/symptom');

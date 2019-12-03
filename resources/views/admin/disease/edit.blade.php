@@ -48,6 +48,7 @@
                                 <div class="col-md-9">
                                     <select class="form-control" name="department_id">
                                         @foreach($department as $v)
+                                            @if(empty($department_id[0])) @endif
                                             <option value="{{ $v->id }}" {{ $department_id[0] == $v->id ? 'selected' : '' }} >{{ $v->name }}</option>
                                         @endforeach
                                     </select>

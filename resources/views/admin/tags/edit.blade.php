@@ -29,7 +29,7 @@
                             <div class="form-group col-md-6">
                                 <label class="col-md-3 control-label">条件名称</label>
                                 <div class="col-md-9">
-                                    <input type="text" class="form-control" name="name" required="" readonly value="{{$data->name}}">
+                                    <input type="text" class="form-control" name="name" required="" value="{{$data->name}}">
                                 </div>
                             </div>
                             <div class="form-group col-md-6">

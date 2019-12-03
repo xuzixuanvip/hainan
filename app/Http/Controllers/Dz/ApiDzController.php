@@ -62,14 +62,14 @@ class ApiDzController extends Controller
         $symp_name = explode(';',$request->symptom_word);
         $data_id = $symptom->whereIn('name',$symp_name)->get()->pluck('id');
 
-        $disease_id = \DB::table('symptom_diseases')
+        $disease_id = \DB::table('kf_symptom_diseases')
                     ->where('symptom_id',$data_id)
                     ->orderBy('probability','desc')
                     ->offset(0)
                     ->limit(5)
                     ->get()
                     ->pluck('diseases_id');
-        $symptom_diseases = \DB::table('symptom_diseases')
+        $symptom_diseases = \DB::table('kf_symptom_diseases')
                                 ->whereIn('diseases_id',$disease_id)
                                 ->orderBy('probability','desc')
                                 ->offset(0)
@@ -100,8 +100,7 @@ class ApiDzController extends Controller
         $data_id = $symptom->whereIn('name',$symp_name)->get()->pluck('id');
         $symptom_ids = $symptom->offset(0)->limit(5)->find($data_id)->pluck('id');
 
-//        $symptom_data = $symptom->select('id','name')->find($request->symptom_id)->symptom_disease->all();
-        $symptom_data = \DB::table('symptom_diseases')
+        $symptom_data = \DB::table('kf_symptom_diseases')
                     ->whereIn('symptom_id',$symptom_ids)
                     ->orderBy('probability','desc')
                     ->offset(0)
@@ -114,22 +113,13 @@ class ApiDzController extends Controller
         $data['symptoms'] = [];
         foreach($disease_msg as $k=>$v){
             $data['disease'][$k]['symptom'] = $v->symptom_disease->pluck('name');
-//            foreach($v->symptom_disease as $v){
-//                $data['disease'][$k]['pro'] = $v->pivot->pluck('probability');
-//            }
 
             $data['symptoms'] =  $v->symptom_disease->pluck('name');
             foreach ($v->symptom_disease as $vv){
                 $data['disease'][$k]['pro'] = $vv->pivot->probability;
             }
         }
-
-//        $disease_msg =  $disease->whereIn('id',$symptom_data)->get();
-////        $data = [];
-////        $data['diseases'] = $disease_msg;
-////        foreach ($disease_msg as $k => $v) {
-////            $data['diseases'][$k] = $v->symptom_diseases;
-//        }
+        $data['department'] = $data['disease'][0]->department;
         return $this->success($data);
     }
 
@@ -165,7 +155,7 @@ class ApiDzController extends Controller
     }
 
 
-    function a_array_unique($array)//写的比较好
+    function a_array_unique($array)
     {
         $out = array();
         foreach ($array as $key=>$value) {

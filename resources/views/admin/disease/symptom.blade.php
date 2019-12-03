@@ -26,6 +26,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <form class="form-horizontal" role="form" action="{{url('zadmin/disease/symptom/insertdata/'.$data->id)}}" method="post" enctype="multipart/form-data">
+
                             <div class="form-group col-md-6">
                                 <label class="col-md-3 control-label">疾病名称</label>
                                 <div class="col-md-9">
@@ -33,13 +34,16 @@
                                 </div>
                             </div>
 
-                            <div class="form-group col-md-6">
+
+                            <div class="form-group col-md-6" style="float: right;" id="public">
                                 <label class="col-md-3 control-label">症状选择</label><br><br><br>
                                 @foreach($result as $v)
-                                <div class="col-md-3">
-                                    <input type="checkbox" value="{{$v->id}}" {{in_array($v->id,$rsrs) ? 'checked=""' : ''}} name="symptom_id[]" checkbox="checkbox"/>{{$v->name}}
-                                    <input type="text" class="form-control" name="probability{{ $v->id }}" @if(in_array($v->id,$rsrs)) required="" @endif value="@foreach($proba as $vv){{ $v->id == $vv->symptom_id ? $vv->probability : '' }}@endforeach" style="width:70px;float:right;height: 25px">
-                                </div>
+                                    @if(!in_array($v->id,$rsrs))
+                                        <div class="col-md-3 public_div" >
+                                            <input type="checkbox" value="{{$v->id}}" {{in_array($v->id,$rsrs) ? 'checked=""' : ''}} name="symptom_id[]" checkbox="checkbox"/>{{$v->name}}
+                                            <input type="text" class="form-control" name="probability{{ $v->id }}" @if(in_array($v->id,$rsrs)) required="" @endif value="@foreach($proba as $vv){{ $v->id == $vv->symptom_id ? $vv->probability : '' }}@endforeach" style="width:70px;float:right;height: 25px">
+                                        </div>
+                                    @endif
                                 @endforeach
                             </div>
 {{--                            <div class="form-group col-md-6">--}}
@@ -49,6 +53,30 @@
 {{--                                        </div>--}}
 {{--                                    @endforeach--}}
 {{--                            </div>--}}
+
+
+                            <div class="form-group col-md-6" style="width: 800px;height: 60px;overflow-x: hidden;overflow-x: hidden;">
+                                <div class="tags" id="" style="text-align: center;float:left;width:60px;border-radius: 5px;margin: 10px;border: 1px solid darkseagreen;font-size: 20px">通用</div>
+                            @foreach($tag as $v)
+                                    <div class="tags" id="{{ $v->id }}" style="text-align: center;float:left;width:60px;border-radius: 5px;margin: 10px;border: 1px solid darkseagreen;font-size: 20px">{{$v->name}}</div>
+                                @endforeach
+                            </div>
+
+                            <div class="form-group col-md-6" style="">
+                                    <div class="col-md-3" style="width:100%">
+                                        <input type="text" class="form-control" placeholder="请填写疾病来搜索症状,如 头疼,胸闷" name="search" id="search" style="">
+                                    </div>
+                            </div>
+
+
+                            <div class="form-group col-md-6" style="width: 800px;height: 370px;overflow-x: hidden;overflow-y: scroll;">
+                                @foreach($rs as $v)
+                                    <div class="col-md-3" style="width: 170px">
+                                        <input type="checkbox" value="{{$v->id}}" checked name="symptom_id[]"/>{{$v->name}}
+                                        <input type="text" class="form-control" name="probability{{ $v->id }}" @if(in_array($v->id,$rsrs)) @endif value="@foreach($proba as $vv){{ $v->id == $vv->symptom_id ? $vv->probability : '' }}@endforeach" style="width:70px;float:right;height: 25px">
+                                    </div>
+                                @endforeach
+                            </div>
 
                             <div class="form-group text-center col-md-12">
 
@@ -135,6 +163,93 @@
                 $('.money').hide();
             }
         });
+
+
+        // $('.public_div').each(function (){
+        //     console.log($(this).attr('hidden',true));
+        //     if($(this).children().eq(0).attr('value') <50){
+        //    }
+        // });
+        $('#search').blur(function() {
+            var name = $(this).val();
+            if(name == ''){
+                public_div(name);
+                return;
+            }
+            $.ajax({
+                url: '{{ route('disease.search') }}',
+                type: 'POST',
+                dataType: 'json',
+                data:{'name':name,'_token':'{{ csrf_token() }}'},
+                success: function(msg) {
+                   if(msg.code == 200){
+                       // console.log(msg.data);
+                       $('#search').val(msg.data2.name);
+                       public_div(msg);
+                   } else {
+                        alert('没有匹配到该疾病');
+                   }
+                },
+                error: function(xhr, type) {
+
+                }
+            })
+        });
+
+
+
+
+        $('.tags').click(function(){
+            var id = $(this).attr('id');
+            if(id == '') {
+                public_div(id);
+                return;
+            }
+            $.ajax({
+                url: '{{ route('disease.tag_search') }}',
+                type: 'POST',
+                dataType: 'json',
+                data:{'id':id,'_token':'{{ csrf_token() }}'},
+                success: function(msg) {
+                    if(msg.code == 200){
+                        // console.log(msg.data);
+                        // $('#search').val(msg.data2.name);
+                        public_div(msg);
+                    } else {
+                        alert('没有匹配到该疾病');
+                    }
+                },
+                error: function(xhr, type) {
+
+                }
+            })
+
+        })
+
+
+        function public_div(msg){
+            if(msg != '') {
+                $('.public_div').each(function (){
+                    // console.log($(this).attr('hidden',true));
+                    $(this).css('color','');
+                    for(var i=0;i<msg.data.length;i++){
+                        // console.log(msg.data[i]);
+                        if( $(this).children().eq(0).attr('value') == msg.data[i]) {
+                            $(this).css('color','red');
+                            // $(this).children().eq(0).attr('backgroud','#ddd');
+                        }
+                    }
+                    //
+                });
+            } else {
+                $('.public_div').each(function (){
+                    // console.log($(this).attr('hidden',true));
+                    $(this).css('color','');
+                    //
+                });
+            }
+
+        }
     </script>
 @endsection
 

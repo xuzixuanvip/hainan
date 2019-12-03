@@ -107,10 +107,34 @@
         .swiper-pagination-bullet-active {
             background: #36bf84
         }
+        div.department {
+            width: 274px;
+            border: 1px solid green;
+            height: 116px;
+            margin: 10px auto;
+            border-radius: 15px;
+            background-color: #6464db;
+        }
+        div.department p {
+            color: white;
+            margin: 10px auto;
+            text-align: center;
+            font-size: 32px;
+        }
+
+        div.department a {
+            color: white;
+            margin: 10px 25px;
+            text-align: center;
+            font-size: 32px;
+            text-align: center;
+            display: block;
+        }
+
     </style>
 </head>
 
-<body>
+<body id="body">
 <!--
 <header>
     <div class="left fl"><a href="/intelligenceserver/view/index">返回</a></div>
@@ -138,7 +162,7 @@
 </section>
 <section class="index_zzzc">
     <h2 class="tybefore">是否还有以下症状</h2>
-    <div class="swiper-container swiper1">
+    <div class="swiper-container swiper1 " id="empty">
         <div class="swiper-wrapper">
         </div>
         <div class='swiper-pagination'></div>
@@ -201,7 +225,8 @@
                 success: function(res) {
                     stoploading();
                     if(res.data.symptoms == undefined || res.data.symptoms == null || res.data.symptoms.length==0){
-                        sw2_show(res);
+                        // sw2_show(res);
+                        fenxi();
                         $(".start_fx").hide();
                         $(".start_fx").attr({
                             "data-toggle": 'hide'
@@ -231,6 +256,7 @@
             $(this).parent("a").remove();
             var isShow = $(".start_fx").attr("data-toggle");
             if (isShow !== 'show') {
+                $('#department').remove();
                 fenxi()
             }else{
                 request();
@@ -247,7 +273,8 @@
             $(this).remove();
             var isShow = $(".start_fx").attr("data-toggle");
             if (isShow !== 'show') {
-                fenxi()
+                $('#department').remove();
+                fenxi();
             }else{
                 request();
             }
@@ -282,8 +309,10 @@
                 loading();
             },
             success: function(res) {
+                $('#empty').empty();
                 stoploading();
                 sw2_show(res);
+                department(res);
                 // swiper2.update();
             }
         });
@@ -320,6 +349,14 @@
         }
 
     }
+
+    function department(res) {
+        var data = res.data.department[0];
+        console.log(data);
+        var html = $("<div class='department' id='department'><p>推荐科室</p><a href='"+ data.href +"' class='block'>【"+ data.name +"】</a></div>");
+        $('#body').append(html);
+    }
+
   // 查找失败
     function sw2_show(res){
         $(".swiper2").find('.swiper-wrapper').html("");
