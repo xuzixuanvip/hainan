@@ -27,7 +27,8 @@ class DiseaseController extends Controller
             $flag->where('name','like','%'.$request->keyword.'%');
         }
         $list = $flag->paginate(10);
-        return view('admin.disease.index',compact('list','where'));
+        $department = Kfdepartment::select('name','id')->get();
+        return view('admin.disease.index',compact('list','where','department'));
     }
 
     /**
@@ -38,7 +39,8 @@ class DiseaseController extends Controller
     public function create(Kfdepartment $department)
     {
         $department =  $department->get();
-        return view('admin.disease.add',compact('department'));
+        $tag = Kftags::get();
+        return view('admin.disease.add',compact('department','tag'));
     }
 
     /**
@@ -51,9 +53,14 @@ class DiseaseController extends Controller
     {
         $rs['status'] = 'danger';
         $rs['msg'] = '操作失败';
-        $request = $request->except($request->_token);
-        $flag = Kfdisease::create($request);
-        \DB::table('kf_diseases_dwebepartment')->insert(['diseases_id'=>$flag->id,'department_id'=>$request['department_id']]);
+        $request1 = $request->except('_token');
+        $flag = Kfdisease::create($request1);
+        $did= $flag->id;
+        $flag->department()->attach($request->department);
+        $flag->tags()->attach($request->tags);
+        $fenci = app('pinyin')->abbr($request->name);
+        \DB::table('kf_diseases_fenci')->insert(['pinyin'=>$fenci,'did'=>$did]);
+//        \DB::table('kf_diseases_department')->insert(['diseases_id'=>$flag->id,'department_id'=>$request->department_id]);
         if ($flag){
             $rs['status'] = 'success';
             $rs['msg'] = '操作成功';
@@ -84,9 +91,12 @@ class DiseaseController extends Controller
     {
         $data = Kfdisease::find($id);
         $department =  $department->get();
-        $department_id =  \DB::table('kf_diseases_department')->where('diseases_id',$id)->get()->pluck('department_id')->all();
-        $department_id = empty($department_id)  ? 0 : $department_id;
-        return view('admin.disease.edit',compact('data','department','department_id'));
+//        $department_id =  \DB::table('kf_diseases_department')->where('diseases_id',$id)->get()->pluck('department_id')->all();
+//        $department_id = empty($department_id)  ? 0 : $department_id;
+        $tag = Kftags::get();
+        $department_id = $data->department->pluck('id')->all();
+        $tags_id = $data->tags->pluck('id')->all();
+        return view('admin.disease.edit',compact('tag','data','department','department_id','tags_id','department_id'));
     }
 
     /**
@@ -98,10 +108,16 @@ class DiseaseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data = $request->except('_token','_method','department_id');
-        $flag = Kfdisease::where('id',$id)->update($data);
-        $flag2= \DB::table('kf_diseases_department')->where('diseases_id',$id)->update(['department_id'=>$request->department_id]);
-        if ($flag || $flag2){
+        $data = $request->except('_token','_method','department','tags');
+        $flag =  Kfdisease::find($id);
+        $flag->update($data);
+        $flag->department()->sync($request->department);
+        $flag->tags()->sync($request->tags);
+        $pinyin = app('pinyin')->abbr($request->name);
+        \DB::table('kf_diseases_fenci')->where('did',$id)->update(['pinyin'=>$pinyin]);
+//        \DB::table('kf_diseases_department')->where('diseases_id',$id)->delete();
+//        $flag2= \DB::table('kf_diseases_department')->insert(['department_id'=>$request->department_id,'diseases_id'=>$id]);
+        if ($flag){
             return redirect('zadmin/disease');
         }
         return back()->withInput();
@@ -117,12 +133,19 @@ class DiseaseController extends Controller
     {
          Kfdisease::find($id)->symptom_disease()->detach();
         \DB::table('kf_diseases_department')->where('diseases_id',$id)->delete();
-        $flag = Kfdisease::destroy($id);
+        $flag = Kfdisease::find($id);
+        $flag->department()->detach();
+        $flag->tags()->detach();
+        $flag->destroy($id);
+        \DB::table('kf_diseases_fenci')->where('did',$id)->delete();
+
         if ($flag){
             return redirect('zadmin/disease');
         }
+
         return back();
     }
+
     public function bathDel(Request $request)
     {
 
@@ -182,23 +205,14 @@ class DiseaseController extends Controller
     {
         $msg = $disease->where('name','like','%'.$request->name.'%')->first();
         if($msg) {
-
             $msg2 =  $msg->symptom_disease->pluck('id');
-
             if($msg2) {
-
                 $data = ['code'=>200,'msg'=>'成功~','data'=>$msg2,'data2'=>$msg];
-
             } else {
-
                 $data = ['code'=>400,'msg'=>'没有该疾病~'];
-
             }
-
         } else {
-
             $data = ['code'=>400,'msg'=>'没有该疾病1~'];
-
         }
 
         return response()->json($data)->setEncodingOptions(JSON_UNESCAPED_UNICODE);

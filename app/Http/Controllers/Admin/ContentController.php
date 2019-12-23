@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Helpers\ImageUploadHandlers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use phpDocumentor\Reflection\DocBlock\StandardTagFactory;
+use phpDocumentor\Reflection\Types\Integer;
 
 class ContentController extends Controller
 {
@@ -16,7 +18,8 @@ class ContentController extends Controller
     public function index()
     {
         $content = \DB::table('kf_content')->get();
-        return view('admin.content.index',compact('content'));
+        $status = \DB::table('kf_content_status')->get()->pluck('status','cid');
+        return view('admin.content.index',compact('content','status'));
     }
 
 
@@ -73,5 +76,21 @@ class ContentController extends Controller
     }
 
 
+    /**
+     * @param Resquest $resquest
+     */
+    public function content_status(Request $request)
+    {
+        $id = $request->id;
+        $status = $request->status;
+        $mes = \DB::table('kf_content_status')->where('id',$id)->update(['status'=>$status]);
+
+        if($mes) {
+            return ['code'=>200,'msg'=>'成功'];
+        } else {
+            return ['code'=>400,'msg'=>'失败'];
+        }
+
+    }
 }
 

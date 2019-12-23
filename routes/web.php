@@ -1,5 +1,5 @@
 <?php
-
+use Overtrue\Pinyin\Pinyin;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -10,6 +10,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 Route::get('yly','YlyController@index');
 Route::get('ai-test','IndexController@AiTest');
 Route::get('test',   'IndexController@test');
@@ -155,6 +156,7 @@ Route::prefix('zadmin')->namespace('Admin')->group(function(){
         Route::post('content/image_update/{id}','ContentController@image_update')->name('content.image.update');
         Route::post('disease/search/','DiseaseController@search')->name('disease.search');
         Route::post('disease/tag_search/','DiseaseController@tag_search')->name('disease.tag_search');
+        Route::post('content/status','ContentController@content_status')->name('content.status');
 
 
 

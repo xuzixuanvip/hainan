@@ -108,9 +108,9 @@
             background: #36bf84
         }
         div.department {
-            width: 274px;
+            width: 300px;
             border: 1px solid green;
-            height: 116px;
+            height: 160px;
             margin: 10px auto;
             border-radius: 15px;
             background-color: #6464db;
@@ -353,7 +353,7 @@
     function department(res) {
         var data = res.data.department[0];
         console.log(data);
-        var html = $("<div class='department' id='department'><p>推荐科室</p><a href='"+ data.href +"' class='block'>【"+ data.name +"】</a></div>");
+        var html = $("<div class='department' id='department'><p>推荐科室</p><a href='"+ data.href +"' class='block'>【"+ data.name +"】</a><p>点击在线咨询</p></div>");
         $('#body').append(html);
     }
 

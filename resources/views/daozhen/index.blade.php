@@ -21,9 +21,16 @@
     </div>
 </header>
  -->
+@if($status[1] == 1)
 <div style="border:1px solid green;height:50px;border-radius: 10px;margin:1px 10px -10px 10px">
     <b style="margin-left:20px">{!!  empty($content) ? '' : $content[0]->content !!}</b>
 </div>
+@endif
+@if($status[2] == 1)
+<div style="border:1px solid green;height:50px;border-radius: 10px;margin:15px 10px -10px 10px">
+    <b style="margin-left:20px">{!! empty($content) ? '' : $content[1]->content !!}</b>
+</div>
+@endif
 <section id="search" class="index_search">
 
     <input type="text" style="border:1px solid green" placeholder="请输入症状或疾病关键字如：发热、头疼、感冒等。" id="myInput">
@@ -38,28 +45,15 @@
         <h2>人体图查症状</h2>
         <p>按部位查看相应症状或疾病</p>
     </a>
-    <div style="border:1px solid green;height:50px;border-radius: 10px;margin:10px 10px -10px 10px">
-        <b style="margin-left:20px">{!! empty($content) ? '' : $content[1]->content !!}</b>
-    </div>
+
 </section>
 <div class="list">
 
     <section class="index_zzzc">
-
-        <h2 class="tybefore">热查症状</h2>
+            <h2 class="tybefore">热查症状</h2>
         <ul class="tab">
+            <div class="con">
 
-{{--            <div class="con none">--}}
-{{--            </div>--}}
-{{--            <div class="con none">--}}
-{{--            </div>--}}
-
-                <div class="con">
-
-{{--                <div class="con none">--}}
-{{--                </div>--}}
-{{--                <div class="con none">--}}
-{{--                </div>--}}
             </div>
         </ul>
     </section>
@@ -122,11 +116,12 @@
                         stoploading();
                         var data = res.data;
                         $.each(data, function(index, el) {
-                        console.log(el);
-                        console.log(index);
+                        // console.log(el);
+                        // console.log(index);
                             var keyword_a = $("<a href='{{ url('daozhen/symptom') }}?symptom_name="+el+"&symptom_id="+index+"'>" + el + "</a>");
                             $(".con").append(keyword_a);
                         });
+
 
                     },
                     error: function(xhr, type) {

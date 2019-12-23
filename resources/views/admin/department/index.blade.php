@@ -1,6 +1,10 @@
 @extends('admin.layouts.app')
 @section('content')
-
+    <style>
+        #department::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
     <!-- Page-Title -->
     <div class="row">
         <div class="col-sm-12">
@@ -28,6 +32,8 @@
                             </div> <!-- form-group -->
                         </form>
                     </div>
+
+
 
                     <div class="col-sm-7">
 
@@ -65,9 +71,15 @@
                                     <td>
                                         {{$v->name}}
                                     </td>
-                                    <td>{{ $v->sex }}</td>
+
+                                    <td id="department">
+                                        @foreach($v->tags as $vv)
+                                            <span style="float:left;border: 1px solid;border-radius: 10px;padding: 3px;">{{ $vv->name }}</span>
+                                        @endforeach
+                                    </td>
+
                                     <td>
-                                        <a href="{{url('zadmin/disease/symptom/'.$v->id)}}">对应疾病添加</a>
+                                        <a href="{{url('zadmin/disease/symptom/'.$v->id)}}">{{$v->name}}({{$v->diseases->count()}})</a>
                                     </td>
                                     <td>
                                         <a href="{{ route('department.edit',$v->id) }}" ><i class="md md-edit"></i>编辑</a>

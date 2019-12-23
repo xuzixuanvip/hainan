@@ -19,13 +19,17 @@ class SymptomController extends Controller
         $where = [];
         $query = Kfsymptom::query();
         if ($request->keyword){
+            $sid = \DB::table('kf_symptom_fenci')->where('pinyin',$request->keyword)->get()->pluck('sid');
             $where['keyword'] = $request->keyword;
+//
             $query->where('name','like','%'.$request->keyword.'%');
+            $query->orWhereIn('id',$sid);
         }
         $list = $query->paginate(10);
+        $tag = Kftags::get();
 //        dump($list[1]);
 //        dd($list[1]->tags->pluck('name'));
-        return view('admin.symptom.index',compact('list','where'));
+        return view('admin.symptom.index',compact('list','where','tag'));
     }
 
     /**
@@ -51,13 +55,19 @@ class SymptomController extends Controller
         $rs['msg']    = '操作失败';
         $data = $request->except('_token','tags');
         $flag = Kfsymptom::create($data);
+        $sid= $flag->id;
         $flag->tags()->attach($request->tags);//批量添加
         if($flag) {
+            $fenci = app('pinyin')->abbr($request->name);
+            \DB::table('kf_symptom_fenci')->insert(['pinyin'=>$fenci,'sid'=>$sid]);
+
             $rs['status'] = 'success';
             $rs['msg']    = '操作成功';
             return redirect('zadmin/symptom')->with('rs',$rs);
         }
         $rs['msg'] = $flag['msg'];
+
+
         return back()->withInput()->with('rs',$rs);
     }
 
@@ -99,6 +109,8 @@ class SymptomController extends Controller
 
         $rs   = Kfsymptom::where('id',$id)->update($data);
         if(!empty($request->tags)){
+            $fenci = app('pinyin')->abbr($request->name);
+            \DB::table('kf_symptom_fenci')->where('sid',$id)->update(['pinyin'=>$fenci]);
             $symptom = new Kfsymptom;
             $symptom = $symptom->find($id);
              $res2 =$symptom->tags()->sync($request->tags);//批量添加
@@ -123,6 +135,7 @@ class SymptomController extends Controller
     {
         \DB::table('kf_body_symptom')->where('symptom_id',$id)->delete();
         \DB::table('kf_symptom_diseases')->where('symptom_id',$id)->delete();
+        \DB::table('kf_symptom_fenci')->where('sid',$id)->delete();
         $rs = Kfsymptom::destroy($id);
         if ($rs) {
             return redirect('zadmin/symptom');

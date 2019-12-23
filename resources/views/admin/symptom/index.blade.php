@@ -23,13 +23,18 @@
                                 <input type="text" id="search" class="form-control"  name="keyword" value="{{array_get($where,'keyword')}}" placeholder="输入症状名搜索">
 
                             </div>
-                            <div class="col-sm-4">
+                            <div class="col-sm-2">
                                 <button type="submit" class="btn btn-white"><i class="fa fa-search"></i></button>
                             </div> <!-- form-group -->
                         </form>
                     </div>
+                    <div class="col-sm-4">
+                    @foreach($tag as $v)
+                            <div style="float:left;margin: 10px;border: 1px solid greenyellow;padding: 4px;width:59px;border-radius: 10px">{{ $v->name }}({{  $v->tags_count->count() }})</div>
+                    @endforeach
+                    </div>
 
-                    <div class="col-sm-7">
+                    <div class="col-sm-1">
 
                             <div class="col-sm-1" style="float: right">
                                 <a href="{{url('zadmin/symptom/create')}}" class="btn btn-primary btn-md waves-effect waves-light m-b-30"

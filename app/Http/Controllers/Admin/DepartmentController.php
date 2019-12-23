@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 use App\Models\Kfdisease;
+use App\Models\Kftags;
 use App\Models\Kfdepartment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -21,27 +22,30 @@ class DepartmentController extends Controller
 
     public function create()
     {
-        return view('admin.department.create');
+        $tag = Kftags::get();
+        return view('admin.department.create',compact('tag'));
     }
 
     public function store(Request $request,Kfdepartment $department)
     {
         $department->fill($request->except('_token'));
         $department->save();
-
+        $department->tags()->attach($request->tags);
         return $this->redirect_msg($department,route('department.index'),'添加');
     }
 
     public function edit(Kfdepartment $department)
     {
-        return view('admin.department.edit',compact('department'));
+        $tag = Kftags::get();
+        $tags_id = $department->tags->pluck('id')->all();
+        return view('admin.department.edit',compact('department','tag','tags_id'));
     }
 
 
     public function update(Request $request,Kfdepartment $department)
     {
-        $department->update($request->except('_token','method'));
-
+        $department->update($request->except('_token','method','tags'));
+        $department->tags()->sync($request->tags);
         return $this->redirect_msg($department,route('department.index'),'修改');
 
     }

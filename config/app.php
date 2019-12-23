@@ -163,7 +163,7 @@ return [
         Intervention\Image\ImageServiceProvider::class,
         Pbmedia\LaravelFFMpeg\FFMpegServiceProvider::class,
         Overtrue\LaravelUEditor\UEditorServiceProvider::class,
-
+        Overtrue\LaravelPinyin\ServiceProvider::class,
         
 
 
@@ -218,7 +218,7 @@ return [
 
         'Image' => Intervention\Image\Facades\Image::class,
         'FFMpeg' => Pbmedia\LaravelFFMpeg\FFMpegFacade::class,
-        
+        'Pinyin' => Overtrue\LaravelPinyin\Facades\Pinyin::class,
 
     ],
 

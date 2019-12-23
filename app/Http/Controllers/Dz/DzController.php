@@ -11,7 +11,8 @@ class DzController extends Controller
     public function index()
     {
         $content = \DB::table('kf_content')->get()->all();
-        return view('daozhen.index',compact('content'));
+        $status = \DB::table('kf_content_status')->get()->pluck('status','cid');
+        return view('daozhen.index',compact('content','status'));
     }
 
     public function body()

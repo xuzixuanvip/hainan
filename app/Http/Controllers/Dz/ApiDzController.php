@@ -22,7 +22,7 @@ class ApiDzController extends Controller
 
     public function symptom(Request $request,Kftags $tag)
     {
-        $tag_msg = $tag->find($request->id)->tags->pluck('name','id');
+        $tag_msg = $tag->find($request->id)->tags_count->pluck('name','id');
 //        $symptom = \DB::table('kf_symptom')->get()->pluck('name','id');
 
         return $this->success($tag_msg);
@@ -119,7 +119,7 @@ class ApiDzController extends Controller
                 $data['disease'][$k]['pro'] = $vv->pivot->probability;
             }
         }
-        $data['department'] = $data['disease'][0]->department;
+        $data['department'] = $data['disease'][0]->department != null ? $data['disease'][0]->department : '暂无推荐';
         return $this->success($data);
     }
 

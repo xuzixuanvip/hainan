@@ -1,6 +1,10 @@
 @extends('admin.layouts.app')
 @section('content')
-
+    <style>
+        .form-group::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
     <!-- Page-Title -->
     <div class="row">
         <div class="col-sm-12">
@@ -33,31 +37,27 @@
                                 </div>
                             </div>
 
-                            <div class="form-group col-md-6">
-                                <label class="col-md-3 control-label">性别</label>
-                                <div class="col-md-9">
-                                    <select class="form-control" name="sex">
-                                        <option value="1" {{$data->sex == 1?'selected':''}} >男</option>
-                                        <option value="2" {{$data->sex == 2?'selected':''}} >女</option>
-                                        <option value="0" {{$data->sex == 3?'selected':''}} >不限</option>
-                                    </select>
+                            <div class="form-group col-md-6" style="height: 84px;width: 789px;overflow:scroll">
+                                <label class="col-md-3 control-label">推荐标签</label>
+                                <div class="col-md-9" style="">
+                                    @foreach($tag as $v)
+                                        <label><input type="checkbox" name="tags[]" {{ in_array($v->id,$tags_id)  ? 'checked' : '' }} style="flaot:left;margin:4px" value="{{$v->id}}">{{ $v->name }}</label>
+                                    @endforeach
                                 </div>
                             </div>
-                            <div class="form-group col-md-6">
+
+                            <div class="form-group col-md-6" style="height: 84px;width: 789px;overflow:scroll">
                                 <label class="col-md-3 control-label">推荐科室</label>
-                                <div class="col-md-9">
-                                    <select class="form-control" name="department_id">
+                                <div class="col-md-9" style="">
                                         @foreach($department as $v)
-                                            @if(empty($department_id[0])) @endif
-                                            <option value="{{ $v->id }}" {{ $department_id[0] == $v->id ? 'selected' : '' }} >{{ $v->name }}</option>
+                                            <label><input type="checkbox" name="department[]" {{ in_array($v->id,$department_id)  ? 'checked' : '' }} style="flaot:left;margin:4px" value="{{$v->id}}">{{ $v->name }}</label>
                                         @endforeach
-                                    </select>
                                 </div>
                             </div>
                             <div class="form-group col-md-6">
                                 <label class="col-md-3 control-label">伴随症状</label>
                                 <div class="col-md-9">
-                                    <textarea type="text" class="form-control" name="concomitant"  value="">{{ old('concomitant',$data->concomitant) }}</textarea>
+                                    <textarea type="text" class="form-control"  name="concomitant"  value="">{{ old('concomitant',$data->concomitant) }}</textarea>
                                 </div>
                             </div>
                             <div class="form-group col-md-6">

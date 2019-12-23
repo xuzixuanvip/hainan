@@ -29,6 +29,7 @@
                         <tr>
 
                             <th>公告内容</th>
+                            <th>开关</th>
                             <th style="width: 200px;">操作</th>
                         </tr>
                         </thead>
@@ -41,6 +42,10 @@
                                 <td>
                                    <p style="white-space: nowrap;width:500px" alt="">{!!   $v->content !!}</p>
                                 </td>
+                                <td>
+                                    <a href="javascript:;" onclick="content_status('{{ $v->id }}','{{ $status[$v->id] }}')">{{ $status[$v->id] == 1 ? '开' : '关' }}</a>
+                            
+                                </td>
 
                                         <td>
                                             <a href="{{ route('content.edit',$v->id) }}" ><i class="md md-edit"></i>编辑</a>
@@ -52,7 +57,9 @@
                                     <td>
                                         <img src="{{url('/').$v->content}} " style="width:50px" alt="">
                                     </td>
+                                    <td>
 
+                                    </td>
                                     <td>
                                         <a href="{{ route('content.image.edit',['id'=>$v->id,'content'=>'img'] )}}" ><i class="md md-edit"></i>编辑</a>
 
@@ -172,6 +179,23 @@
             },'json');
 
             return false;
+        }
+
+
+        function content_status(id,status) {
+            if(id == '' && status == '') {
+                return false;
+            }
+            if(status == 1) {
+                status = 0;
+            } else {
+                status = 1;
+            }
+            // cons
+            $.post('{{route('content.status')}}',{'_token':'{{ csrf_token() }}','id':id,'status':status},function (data) {
+                    window.location.reload();
+            },'json')
+
         }
     </script>
 @endsection

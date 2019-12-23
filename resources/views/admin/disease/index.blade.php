@@ -1,6 +1,19 @@
 @extends('admin.layouts.app')
 @section('content')
-
+    <style>
+        /* #department {*/
+        /*    width: 500px;*/
+        /*    overflow-x: scroll;*/
+        /*    overflow-y: scroll;*/
+        /*    !*overflow-y: hidden;*!*/
+        /*    line-height: 30px;*/
+        /*    text-align: center;*/
+        /*    display: block;*/
+        /*}*/
+        #department::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
     <!-- Page-Title -->
     <div class="row">
         <div class="col-sm-12">
@@ -29,7 +42,13 @@
                         </form>
                     </div>
 
-                    <div class="col-sm-7">
+                    <div class="col-sm-4" id="department" style="heihgt:50px;width: 500px;overflow: scroll;white-space:nowrap;height:76px">
+                        @foreach($department as $v)
+                            <div style="float:left;margin: 10px;border: 1px solid greenyellow;padding: 4px;border-radius: 10px">{{ $v->name }}({{ $v->diseases->count() }})</div>
+                        @endforeach
+                    </div>
+
+                    <div class="col-sm-2">
 
                         <div class="col-sm-1" style="float: right">
                             <a href="{{url('zadmin/disease/create')}}" class="btn btn-primary btn-md waves-effect waves-light m-b-30"
@@ -55,7 +74,9 @@
 
                             </th>
                             <th>疾病名称</th>
-                            <th>疾病性别</th>
+                            <th>对应科室</th>
+                            <th>对应症状</th>
+                            <th>适用人群</th>
                             <th>对应症状</th>
                             <th style="width: 200px;">操作</th>
                         </tr>
@@ -74,14 +95,20 @@
                                 <td>
                                     {{$v->name}}
                                 </td>
+                                <td class='col-sm-2' style="width: 200px;">
+                                    @foreach($v->department as $vv)
+                                        <span style="float:left;border: 1px solid;border-radius: 10px;padding: 3px;">{{ $vv->name }}</span>
+                                    @endforeach
+                                </td>
+                                <td class='col-sm-4' style="width: 250px;">
+                                    @foreach($v->symptom_disease as $vv)
+                                        <span style="float:left;border: 1px solid;border-radius: 10px;padding: 3px;margin: 1px">{{ $vv->name }}</span>
+                                    @endforeach
+                                </td>
                                 <td>
-                                    @if($v->sex == 0)
-                                        不限
-                                        @elseif($v->sex == 1)
-                                    男
-                                        @else
-                                    女
-                                        @endif
+                                    @foreach($v->tags as $vv)
+                                        <span style="float:left;border: 1px solid;border-radius: 10px;padding: 3px;margin: 1px">{{ $vv->name }}</span>
+                                    @endforeach
                                 </td>
                                 <td>
                                     <a href="{{url('zadmin/disease/symptom/'.$v->id)}}">对应症状添加</a>

@@ -33,16 +33,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group col-md-6">
-                                <label class="col-md-3 control-label">性别</label>
-                                <div class="col-md-9">
-                                    <select class="form-control" name="sex">
-                                        <option value="1" {{$data->sex == 1?'selected':''}} >男</option>
-                                        <option value="2" {{$data->sex == 2?'selected':''}} >女</option>
-                                        <option value="0" {{$data->sex == 3?'selected':''}} >不限</option>
-                                    </select>
-                                </div>
-                            </div>
+
                             <div class="form-group col-md-3" style="margin-left: 7%;width: 80%;">
                                 <b>请选择该症状适用人群: </b>
                                 @foreach($tag as $k => $v)

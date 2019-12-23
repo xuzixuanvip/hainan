@@ -1,6 +1,10 @@
 @extends('admin.layouts.app')
 @section('content')
-
+    <style>
+        .form-group::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
     <!-- Page-Title -->
     <div class="row">
         <div class="col-sm-12">
@@ -32,24 +36,20 @@
                                     <input type="text" class="form-control" name="name" required="" value="{{ old('name') }}">
                                 </div>
                             </div>
-                            <div class="form-group col-md-6">
-                                <label class="col-md-3 control-label">性别</label>
-                                <div class="col-md-9">
-                                    <select class="form-control" name="sex">
-                                        <option value="1" >男</option>
-                                        <option value="2" >女</option>
-                                        <option value="0" >不限</option>
-                                    </select>
+                            <div class="form-group col-md-6" style="height: 84px;width: 789px;overflow:scroll">
+                                <label class="col-md-3 control-label">推荐标签</label>
+                                <div class="col-md-9" style="">
+                                    @foreach($tag as $v)
+                                        <label><input type="checkbox" name="tags[]" style="flaot:left;margin:4px" value="{{$v->id}}">{{ $v->name }}</label>
+                                    @endforeach
                                 </div>
                             </div>
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-6" style="height: 84px;width: 789px;overflow:scroll">
                                 <label class="col-md-3 control-label">推荐科室</label>
-                                <div class="col-md-9">
-                                    <select class="form-control" name="department_id">
-                                        @foreach($department as $v)
-                                            <option value="{{ $v->id }}" >{{ $v->name }}</option>
-                                        @endforeach
-                                    </select>
+                                <div class="col-md-9" style="">
+                                    @foreach($department as $v)
+                                        <label><input type="checkbox" name="department[]" style="flaot:left;margin:4px" value="{{$v->id}}">{{ $v->name }}</label>
+                                    @endforeach
                                 </div>
                             </div>
                             <div class="form-group col-md-6">

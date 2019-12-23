@@ -18,7 +18,12 @@ class Kfdepartment extends Model
 
     public function diseases()
     {
-        return $this->belongsToMany('App\Models\kfdiseases','kf_diseases_department','department_id','diseases_id');
+        return $this->belongsToMany('App\Models\Kfdisease','kf_diseases_department','department_id','diseases_id');
+    }
+
+    public function tags()
+    {
+        return $this->belongsToMany('App\Models\Kftags','kf_tag_department','did','tid');
     }
 
 
@@ -27,12 +32,12 @@ class Kfdepartment extends Model
         return $filters->apply($query);
     }
 
-    public function getSexAttribute($value)
-    {
-        $status = ['0'=>'不限','1'=>'男','2'=>'女'];
-
-        return $status[$value];
-
-    }
+//    public function getSexAttribute($value)
+//    {
+//        $status = ['0'=>'不限','1'=>'男','2'=>'女'];
+//
+//        return $status[$value];
+//
+//    }
 
 }

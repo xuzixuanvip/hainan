@@ -21,7 +21,11 @@ class Kfdisease extends Model
 
     public function department()
     {
-        return $this->belongsToMany('App\Models\kfdepartment','kf_diseases_department','diseases_id','department_id');
+        return $this->belongsToMany('App\Models\Kfdepartment','kf_diseases_department','department_id','diseases_id');
     }
 
+    public function tags()
+    {
+        return $this->belongsToMany('App\Models\Kftags','kf_tag_diseases','did','tid');
+    }
 }
