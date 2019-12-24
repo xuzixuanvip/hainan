@@ -25,10 +25,12 @@ class SymptomController extends Controller
             $query->where('name','like','%'.$request->keyword.'%');
             $query->orWhereIn('id',$sid);
         }
+        if($request->tag) {
+            $tids = \DB::table('kf_tag_symptom')->where('tag_id',$request->tag)->get()->pluck('symptom_id')->all();
+            $query->orWhereIn('id',$tids);
+        }
         $list = $query->paginate(10);
         $tag = Kftags::get();
-//        dump($list[1]);
-//        dd($list[1]->tags->pluck('name'));
         return view('admin.symptom.index',compact('list','where','tag'));
     }
 

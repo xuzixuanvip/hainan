@@ -30,7 +30,7 @@
                     </div>
                     <div class="col-sm-4">
                     @foreach($tag as $v)
-                            <div style="float:left;margin: 10px;border: 1px solid greenyellow;padding: 4px;width:59px;border-radius: 10px">{{ $v->name }}({{  $v->tags_count->count() }})</div>
+                            <div style="float:left;margin: 10px;border: 1px solid greenyellow;padding: 4px;width:59px;border-radius: 10px"><a href="{{ url('/zadmin/symptom') }}?tag={{ $v->id }}">{{ $v->name }}({{  $v->tags_count->count() }})</a></div>
                     @endforeach
                     </div>
 

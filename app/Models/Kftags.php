@@ -15,7 +15,7 @@ class Kftags extends Model
 
     public function tags_count()
     {
-        return $this->belongsToMany('App\Models\Kfsymptom','kf_tag_symptom','symptom_id','tag_id');
+        return $this->belongsToMany('App\Models\Kfsymptom','kf_tag_symptom','tag_id','symptom_id');
     }
 
 }

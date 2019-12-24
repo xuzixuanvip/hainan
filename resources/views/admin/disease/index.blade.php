@@ -1,15 +1,6 @@
 @extends('admin.layouts.app')
 @section('content')
     <style>
-        /* #department {*/
-        /*    width: 500px;*/
-        /*    overflow-x: scroll;*/
-        /*    overflow-y: scroll;*/
-        /*    !*overflow-y: hidden;*!*/
-        /*    line-height: 30px;*/
-        /*    text-align: center;*/
-        /*    display: block;*/
-        /*}*/
         #department::-webkit-scrollbar {
             display: none;
         }
@@ -44,7 +35,7 @@
 
                     <div class="col-sm-4" id="department" style="heihgt:50px;width: 500px;overflow: scroll;white-space:nowrap;height:76px">
                         @foreach($department as $v)
-                            <div style="float:left;margin: 10px;border: 1px solid greenyellow;padding: 4px;border-radius: 10px">{{ $v->name }}({{ $v->diseases->count() }})</div>
+                            <div style="float:left;margin: 10px;border: 1px solid greenyellow;padding: 4px;border-radius: 10px"> <a href="{{ url('/zadmin/disease') }}?department={{ $v->id }}">{{ $v->name }}({{ $v->diseases->count() }})</a></div>
                         @endforeach
                     </div>
 
