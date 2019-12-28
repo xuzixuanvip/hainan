@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dz;
 
 use App\Models\kfBody;
+use App\Models\Kfdepartment;
 use App\Models\Kfdisease;
 use App\Models\Kftags;
 use App\Models\Kfsymptom;
@@ -165,5 +166,18 @@ class ApiDzController extends Controller
             }
         }
         return $out;
+    }
+
+
+    /**
+     * 名医点击api
+     * @param Request $request
+     */
+    public function doctor(Request $request)
+    {
+//        $data = \DB::table('kf_doctor_department')->where('department_id',$request->id)->get();
+        $department = Kfdepartment::find($request->id);
+        $doctor = $department->doctor;
+        return $this->response($doctor,'成功', $doctor);
     }
 }

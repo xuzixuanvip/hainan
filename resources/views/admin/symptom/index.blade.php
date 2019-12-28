@@ -28,6 +28,9 @@
                             </div> <!-- form-group -->
                         </form>
                     </div>
+                    <div class="col-sm-1">
+                        <a class="btn btn-white" href="{{ route('symptom.index') }}">刷新</a>
+                    </div>
                     <div class="col-sm-4">
                     @foreach($tag as $v)
                             <div style="float:left;margin: 10px;border: 1px solid greenyellow;padding: 4px;width:59px;border-radius: 10px"><a href="{{ url('/zadmin/symptom') }}?tag={{ $v->id }}">{{ $v->name }}({{  $v->tags_count->count() }})</a></div>

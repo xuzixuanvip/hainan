@@ -32,7 +32,9 @@
                             </div> <!-- form-group -->
                         </form>
                     </div>
-
+                    <div class="col-sm-1">
+                        <a class="btn btn-white" href="{{ route('disease.index') }}">刷新</a>
+                    </div>
                     <div class="col-sm-4" id="department" style="heihgt:50px;width: 500px;overflow: scroll;white-space:nowrap;height:76px">
                         @foreach($department as $v)
                             <div style="float:left;margin: 10px;border: 1px solid greenyellow;padding: 4px;border-radius: 10px"> <a href="{{ url('/zadmin/disease') }}?department={{ $v->id }}">{{ $v->name }}({{ $v->diseases->count() }})</a></div>

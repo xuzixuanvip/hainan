@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Dz;
 
 use App\Models\kfBody;
+use App\Models\Kfdepartment;
+use App\Models\Kfdoctor;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -49,5 +51,20 @@ class DzController extends Controller
             return redirect(route('daozhen.index'));
         }
         return view('daozhen.search');
+    }
+
+    /**
+     *  科室对应医生
+     */
+    public function doctor(Request $request)
+    {
+        $department = Kfdepartment::get();
+        $doctor = $department[0]->doctor->pluck('name','id');
+        return view('daozhen.doctor',compact('department','doctor'));
+    }
+
+    public function doctor_show(Kfdoctor $doctor)
+    {
+        return view('daozhen.doctor_show',compact('doctor'));
     }
 }

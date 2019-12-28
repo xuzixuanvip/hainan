@@ -11,6 +11,22 @@
 <style>
     .index_rtt a{display: block; width: 100%; height: 5rem;background:url({{ empty($content[2]->content) ? 'http://cs.pro.atag.bsoft.com.cn/intelligenceserver/res/img/renti.png' : url('/').$content[2]->content  }}) no-repeat left center;
         background-size:60px; padding-left: 6rem; color: #999999 ;box-sizing:border-box;}
+    div#yiyuan {
+        /*border:1px solid #ddd;*/
+        height:70px;
+        border-radius: 10px;
+        margin:15px 10px -10px 10px;
+        box-sizing: border-box;
+        color: #0b0b0b;
+    }
+    div#yiyuan span {
+        width: 100px;
+        border-right:1px solid #4d4d4d;
+        font-size: 20px;
+        margin: 15px;
+        padding-right: 15px;
+        box-sizing: border-box;
+    }
 </style>
 <!--
 <header>
@@ -31,6 +47,19 @@
     <b style="margin-left:20px">{!! empty($content) ? '' : $content[1]->content !!}</b>
 </div>
 @endif
+<div id="yiyuan" >
+    <b style="float:left;margin:2px 0 0 60px">
+        <span><a href="">医院介绍</a></span>
+        <span style="padding-right: 30px">门诊介绍</span>
+        <span style="border: 0px solid whitesmoke">科室介绍</span>
+
+    </b>
+    <b style="float:left;margin:10px 0 0 60px">
+        <span><a href="{{ route('daozhen.doctor') }}">名医专家</a></span>
+        <span style="padding-right: 30px">就医指南</span>
+        <span style="border: 0px solid whitesmoke">使用帮助</span>
+    </b>
+</div>
 <section id="search" class="index_search">
 
     <input type="text" style="border:1px solid green" placeholder="请输入症状或疾病关键字如：发热、头疼、感冒等。" id="myInput">
@@ -47,6 +76,7 @@
     </a>
 
 </section>
+
 <div class="list">
 
     <section class="index_zzzc">
@@ -59,7 +89,9 @@
     </section>
 
 </div>
+
 <div class="search_result">
+
     <h3>你是不是要找一下症状？</h3>
     <div class="one_a">
     </div>
@@ -67,6 +99,7 @@
     <div class="two_a">
     </div>
 </div>
+
 <script type="text/javascript" src="{{url('/dz/js/zeptom.min.js')}}"></script>
 <script type="text/javascript" src="{{url('/dz/js/public.js')}}"></script>
 <script type="text/javascript">
@@ -104,7 +137,9 @@
                     var tab_li = $("<li data-id='" + el.id + "'><span><img src='{{url('/')}}" + el.image + "'></span><span>" + el.name + "</span></li>");
                     $(".tab").prepend(tab_li);
                 });
+
                 $(".tab").find('li').eq(2).addClass('cur');
+                // $(".tab2").find('li').eq(2).addClass('cur');
                 // tab切换内容初始化
                 var li_id = $(".tab").find('li').eq(2).data('id');
                 $.ajax({

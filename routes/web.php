@@ -1,4 +1,6 @@
 <?php
+
+use App\Models\Kfdoctor;
 use Overtrue\Pinyin\Pinyin;
 /*
 |--------------------------------------------------------------------------
@@ -157,6 +159,8 @@ Route::prefix('zadmin')->namespace('Admin')->group(function(){
         Route::post('disease/search/','DiseaseController@search')->name('disease.search');
         Route::post('disease/tag_search/','DiseaseController@tag_search')->name('disease.tag_search');
         Route::post('content/status','ContentController@content_status')->name('content.status');
+        Route::resource('doctor','DoctorController');
+        Route::delete('doctor.delete','DoctorController@delete')->name('doctor.delete');
 
 
 
@@ -290,3 +294,6 @@ Route::post('api/symptom/fenxi','Dz\ApiDzController@fenxi')->name('api.fenxi');
 Route::get('daozhen/diseaseRetrieve','Dz\DzController@diseaseRetrieve')->name('daozhen.diseaseRetrieve');
 Route::post('api/diseaseRetrieve','Dz\ApiDzController@diseaseRetrieve')->name('api.diseaseRetrieve');
 Route::get('daozhen/search','Dz\DzController@search')->name('daozhen.search');
+Route::get('daozhen/doctor','Dz\DzController@doctor')->name('daozhen.doctor');
+Route::get('daozhen/doctor_show/{doctor}','Dz\DzController@doctor_show')->name('daozhen.doctor_show');
+Route::post('api/daozhen/doctor','Dz\ApiDzController@doctor')->name('api.daozhen.doctor');

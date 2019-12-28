@@ -27,17 +27,22 @@ class Kfdepartment extends Model
     }
 
 
-    public function scopeFilter($query,Filters $filters)
+    /**
+     * @param $query
+     * @param Filters $filters
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeFilter($query, Filters $filters)
     {
         return $filters->apply($query);
     }
 
-//    public function getSexAttribute($value)
-//    {
-//        $status = ['0'=>'不限','1'=>'男','2'=>'女'];
-//
-//        return $status[$value];
-//
-//    }
+    /**
+     * @return mixed
+     */
+    public function doctor()
+    {
+        return $this->belongsToMany('App\Models\Kfdoctor', 'kf_doctor_department', 'department_id','doctor_id');
+    }
 
 }
