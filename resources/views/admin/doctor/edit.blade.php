@@ -49,7 +49,7 @@
                             <div class="form-group col-md-6">
                                 <label class="col-md-3 control-label">职位</label>
                                 <div class="col-md-9">
-                                    <textarea type="text" class="form-control" name="title"  value="{{ old('title') }}"></textarea>
+                                    <textarea type="text" class="form-control" name="title"  value="{{ old('title') }}">{{ old('title',$doctor->title) }}</textarea>
                                 </div>
                             </div>
                             <div class="form-group col-md-6">

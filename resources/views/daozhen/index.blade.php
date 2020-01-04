@@ -15,16 +15,19 @@
         /*border:1px solid #ddd;*/
         height:70px;
         border-radius: 10px;
-        margin:15px 10px -10px 10px;
+        margin:15px 10px -10px 5%;
         box-sizing: border-box;
         color: #0b0b0b;
+        width: 80%
     }
+    /*/etc/nginx/conf.d/default.conf*/
+    /*/usr/share/nginx/html;*/
     div#yiyuan span {
-        width: 100px;
+        /*width: 100px;*/
         border-right:1px solid #4d4d4d;
-        font-size: 20px;
-        margin: 15px;
-        padding-right: 15px;
+        font-size: 17px;
+        margin-right: 3%;
+        padding-right: 2%;
         box-sizing: border-box;
     }
 </style>
@@ -48,15 +51,16 @@
 </div>
 @endif
 <div id="yiyuan" >
-    <b style="float:left;margin:2px 0 0 60px">
+    <b style="float:left;margin:2px 0 0 5%;width: 111%;">
         <span><a href="">医院介绍</a></span>
-        <span style="padding-right: 30px">门诊介绍</span>
+        <span style="padding-right: 3%">门诊介绍</span>
         <span style="border: 0px solid whitesmoke">科室介绍</span>
 
     </b>
-    <b style="float:left;margin:10px 0 0 60px">
+    <br>
+    <b style="float:left;margin:2px 0 0 5%;width: 111%">
         <span><a href="{{ route('daozhen.doctor') }}">名医专家</a></span>
-        <span style="padding-right: 30px">就医指南</span>
+        <span style="padding-right: 3%;margin-right: 3% ">就医指南</span>
         <span style="border: 0px solid whitesmoke">使用帮助</span>
     </b>
 </div>

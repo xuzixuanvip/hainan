@@ -120,7 +120,9 @@ class ApiDzController extends Controller
                 $data['disease'][$k]['pro'] = $vv->pivot->probability;
             }
         }
-        $data['department'] = $data['disease'][0]->department != null ? $data['disease'][0]->department : '暂无推荐';
+        if(!empty($data['disease'][0]->department)) {
+             $data['department'] = $data['disease'][0]->department;
+        }
         return $this->success($data);
     }
 

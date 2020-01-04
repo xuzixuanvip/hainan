@@ -93,9 +93,10 @@ class DoctorController extends Controller
      */
     public function update(Request $request, Kfdoctor $doctor)
     {
-        $image = app(ImageUploadHandlers::class)->save2($request->img,'doctor');
-//        $doctor->
-        $request->offsetSet('image',$image['msg']);
+        if($request->hasFile('img')){
+            $image = app(ImageUploadHandlers::class)->save2($request->img,'doctor');
+            $request->offsetSet('image',$image['msg']);
+        }
         $doctor->update($request->except('_token','_method','department'));
         $msg = $doctor->department()->sync($request->department);
         if($msg) {

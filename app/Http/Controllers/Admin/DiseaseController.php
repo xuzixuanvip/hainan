@@ -30,7 +30,7 @@ class DiseaseController extends Controller
             $dids = \DB::table('kf_diseases_department')->where('department_id',$request->department)->get()->pluck('diseases_id')->all();
             $flag->orWhereIn('id',$dids);
         }
-        $list = $flag->paginate(10);
+        $list = $flag->paginate(1);
         $department = Kfdepartment::select('name','id')->get();
         return view('admin.disease.index',compact('list','where','department'));
     }
@@ -169,7 +169,7 @@ class DiseaseController extends Controller
         $result = Kfsymptom::all();
 
         $proba = DB::table('kf_symptom_diseases')->where('diseases_id',$id)->get();
-        $rs = $data->symptom_disease->get();
+        $rs = $data->symptom_disease;
         $rsrs = [];
         foreach ($rs as $k=>$v){
             $rsrs[] = $v->id;

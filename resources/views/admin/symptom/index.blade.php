@@ -111,7 +111,7 @@
 
                 </div>
 
-                {{$list->links()}}
+                {{$list->appends(Request()->all())->links()}}
             </div>
 
         </div> <!-- end col -->
