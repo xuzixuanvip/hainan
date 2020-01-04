@@ -12,6 +12,7 @@ class Kfsymptom extends Model
     protected $guarded = [];
 
 
+
     public function symptom_disease()
     {
         return $this->belongsToMany('App\Models\Kfdisease','kf_symptom_diseases','symptom_id','diseases_id')->withPivot('probability');
