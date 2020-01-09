@@ -30,7 +30,7 @@ class DiseaseController extends Controller
             $dids = \DB::table('kf_diseases_department')->where('department_id',$request->department)->get()->pluck('diseases_id')->all();
             $flag->orWhereIn('id',$dids);
         }
-        $list = $flag->paginate(1);
+        $list = $flag->paginate(15);
         $department = Kfdepartment::select('name','id')->get();
         return view('admin.disease.index',compact('list','where','department'));
     }
